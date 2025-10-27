@@ -30,7 +30,7 @@ export default function Esurat() {
     }
   }
 
-  const qrUrl = `http://track.sistelk.id/${kodeSurat}`
+  const qrUrl = `http://track.sistelk.id/progress/${kodeSurat}`
   
   const copyToClipboard = async () => {
     try {
