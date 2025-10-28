@@ -79,6 +79,14 @@ export default function DataIncoming() {
       searchable: true,
       sortable: true,
       render: (item) => {
+        // Cek apakah tanggal konfirmasi ada
+        if (!item || item === null || item === "") {
+          return (
+            <span className="text-gray-500 italic">
+              Belum di konfirmasi
+            </span>
+          );
+        }
         return dayjs(item).format("DD-MM-YYYY");
       },
     },
