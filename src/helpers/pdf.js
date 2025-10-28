@@ -5,7 +5,7 @@
 // - string relative path (e.g., "/api/storage/file_123.pdf")
 // - absolute URL (e.g., "http://localhost:3005/api/storage/file_123.pdf")
 // - object with fields: file_url | file | kode | id
-export function toPdfUrl(input, base = 'http://localhost:3005') {
+export function toPdfUrl(input, base = 'https://rest1.sistelk.id') {
   if (!input) return ''
 
   const build = (value) => {
