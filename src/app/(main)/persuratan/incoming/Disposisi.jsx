@@ -8,6 +8,7 @@ export default function Disposisi({ disposisiSurat, isDisposisiMode, onClose, on
   const [selectedDisposisi, setSelectedDisposisi] = useState('')
   const [loading, setLoading] = useState(false)
   const [catatan, setCatatan] = useState('')
+  const [hp, setHp] = useState('')
   const { roles, getRoles } = useData()
 
   
@@ -21,7 +22,8 @@ export default function Disposisi({ disposisiSurat, isDisposisiMode, onClose, on
       // Ambil disposisi pertama jika ada multiple (untuk kompatibilitas)
       const disposisiArray = disposisiSurat.disposisi.split(',').filter(Boolean)
       setSelectedDisposisi(disposisiArray[0] || '')
-      setCatatan(disposisiSurat.catatan_disposisi || '')
+      setCatatan(disposisiSurat.ket || '')
+      setHp(disposisiSurat.hp || '')
     }
   }, [isDisposisiMode, disposisiSurat])
 
@@ -36,6 +38,8 @@ export default function Disposisi({ disposisiSurat, isDisposisiMode, onClose, on
     try {
       const response = await api.put(`/sisfo/incoming/${disposisiSurat.id}/disposisi`, {
         disposisi: selectedDisposisi,
+        ket: catatan,
+        hp:hp
       })
       if (response.data.status === "success") {
         onSuccess(response.data.data)
@@ -52,6 +56,7 @@ export default function Disposisi({ disposisiSurat, isDisposisiMode, onClose, on
   const handleCancel = () => {
     setSelectedDisposisi('')
     setCatatan('')
+    setHp('')
     if (onClose) {
       onClose()
     }
@@ -108,7 +113,36 @@ export default function Disposisi({ disposisiSurat, isDisposisiMode, onClose, on
           ))}
         </div>
 
-        
+        {/* No HP Field */}
+        <div>
+          <label htmlFor="hp" className="block text-sm font-medium text-gray-700 mb-2">
+            No. HP <span className="text-red-600">*</span>
+          </label>
+          <input
+            type="tel"
+            id="hp"
+            value={hp}
+            onChange={(e) => setHp(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+            placeholder="Masukkan nomor HP"
+            required
+          />
+        </div>
+
+        {/* Keterangan Field */}
+        <div>
+          <label htmlFor="keterangan" className="block text-sm font-medium text-gray-700 mb-2">
+            Keterangan
+          </label>
+          <textarea
+            id="keterangan"
+            value={catatan}
+            onChange={(e) => setCatatan(e.target.value)}
+            rows={4}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none"
+            placeholder="Tambahkan keterangan untuk disposisi ini..."
+          />
+        </div>
 
         {/* Action Buttons */}
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
@@ -122,7 +156,7 @@ export default function Disposisi({ disposisiSurat, isDisposisiMode, onClose, on
           </button>
           <button
             type="submit"
-            disabled={loading || !selectedDisposisi}
+            disabled={loading || !selectedDisposisi || !hp}
             className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
           >
             {loading ? (
