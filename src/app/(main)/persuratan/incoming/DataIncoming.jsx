@@ -99,6 +99,12 @@ export default function DataIncoming() {
       
     },
     {
+      key: "kontak_person", // 🔧 GANTI: field dari API response
+      title: "Kontak Person", // 🔧 GANTI: judul kolom
+      searchable: true,
+      sortable: true,
+    },
+    {
       key: "tgl_pelaksanaan", // 🔧 GANTI: field dari API response
       title: "Tanggal Pelaksanaan", // 🔧 GANTI: judul kolom
       searchable: true,
