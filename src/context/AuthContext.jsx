@@ -1,37 +1,33 @@
 'use client'
+
 import { createContext, useContext, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import api from '@/utils/api'
 
-// Create Auth Context
 const AuthContext = createContext()
 
-// Auth Provider Component
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const router = useRouter()
 
-  // Check if user is authenticated on mount
   useEffect(() => {
     checkAuth()
   }, [])
 
-  // Function to check authentication status
   const checkAuth = async () => {
     try {
       setLoading(true)
-      
-      // Check if token exists
       const token = localStorage.getItem('token')
+      
       if (!token) {
         setUser(null)
         setIsAuthenticated(false)
+        setLoading(false)
         return
       }
-      
-      // First load cached user data
+
       const cachedUser = localStorage.getItem('user')
       if (cachedUser) {
         try {
@@ -42,10 +38,17 @@ export function AuthProvider({ children }) {
           localStorage.removeItem('user')
         }
       }
-      
-      // Verify with server
+
+      // Cek apakah sudah di halaman login, jika ya jangan panggil API untuk menghindari loop
+      if (typeof window !== 'undefined') {
+        const currentPath = window.location.pathname
+        if (currentPath === '/login' || currentPath.startsWith('/login')) {
+          setLoading(false)
+          return
+        }
+      }
+
       const response = await api.get('/current-user')
-      
       if (response.data.status === 'success') {
         const userData = response.data.data
         setUser(userData)
@@ -58,7 +61,13 @@ export function AuthProvider({ children }) {
         localStorage.removeItem('token')
       }
     } catch (error) {
-      console.error('Auth check failed:', error)
+      // Jangan log error jika sudah di halaman login (untuk menghindari spam console)
+      if (typeof window !== 'undefined') {
+        const currentPath = window.location.pathname
+        if (currentPath !== '/login' && !currentPath.startsWith('/login')) {
+          console.error('Auth check failed:', error)
+        }
+      }
       setUser(null)
       setIsAuthenticated(false)
       localStorage.removeItem('user')
@@ -68,25 +77,17 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // Login function
   const login = async (email, password) => {
     try {
       setLoading(true)
-      const response = await api.post('/login', {
-        email,
-        password
-      })
-
+      const response = await api.post('/login', { email, password })
+      
       if (response.data.status === 'success') {
         const { token, user: userData } = response.data.data
-        
-        // Save token and user data
         localStorage.setItem('token', token)
         localStorage.setItem('user', JSON.stringify(userData))
-        
         setUser(userData)
         setIsAuthenticated(true)
-        
         return { success: true, message: response.data.message }
       } else {
         return { success: false, message: response.data.message }
@@ -100,7 +101,6 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // Logout function
   const logout = async () => {
     try {
       setLoading(true)
@@ -108,7 +108,6 @@ export function AuthProvider({ children }) {
     } catch (error) {
       console.error('Logout error:', error)
     } finally {
-      // Clear user data regardless of API response
       setUser(null)
       setIsAuthenticated(false)
       localStorage.removeItem('user')
@@ -118,11 +117,9 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // Get current user function
   const getUser = async () => {
     try {
       const response = await api.get('/current-user')
-      
       if (response.data.status === 'success') {
         const userData = response.data.data
         setUser(userData)
@@ -146,11 +143,9 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // Update user profile
   const updateUser = async (userData) => {
     try {
       const response = await api.put('/auth/profile', userData)
-
       if (response.data.status === 'success') {
         const updatedUser = response.data.data
         setUser(updatedUser)
@@ -166,14 +161,12 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // Change password
   const changePassword = async (currentPassword, newPassword) => {
     try {
       const response = await api.put('/auth/change-password', {
         currentPassword,
         newPassword
       })
-
       return { 
         success: response.data.status === 'success', 
         message: response.data.message 
@@ -185,7 +178,6 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // Utility functions for localStorage
   const clearAuthData = () => {
     localStorage.removeItem('user')
     localStorage.removeItem('token')
@@ -211,7 +203,24 @@ export function AuthProvider({ children }) {
     }
   }
 
-  // Context value
+  // ✅ TAMBAHKAN HELPER FUNCTIONS UNTUK ROLE
+  const isAdmin = () => {
+    return user?.role === 'admin' || user?.role === 'superadmin'
+  }
+
+  const hasRole = (roles) => {
+    if (!user?.role) return false
+    if (Array.isArray(roles)) {
+      return roles.includes(user.role)
+    }
+    return user.role === roles
+  }
+
+  const canAccess = (allowedRoles) => {
+    if (!allowedRoles || allowedRoles.length === 0) return true
+    return hasRole(allowedRoles)
+  }
+
   const value = {
     user,
     loading,
@@ -224,7 +233,11 @@ export function AuthProvider({ children }) {
     checkAuth,
     clearAuthData,
     getCachedUser,
-    setCachedUser
+    setCachedUser,
+    // ✅ Tambahkan helper functions
+    isAdmin,
+    hasRole,
+    canAccess
   }
 
   return (
@@ -234,7 +247,6 @@ export function AuthProvider({ children }) {
   )
 }
 
-// Custom hook to use auth context
 export function useAuth() {
   const context = useContext(AuthContext)
   if (context === undefined) {
@@ -243,5 +255,4 @@ export function useAuth() {
   return context
 }
 
-// Export AuthContext for direct access if needed
 export default AuthContext

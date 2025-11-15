@@ -82,7 +82,7 @@ export default function DataIncoming() {
         // Cek apakah tanggal konfirmasi ada
         if (!item || item === null || item === "") {
           return (
-            <span className="text-gray-500 italic">
+            <span className="text-gray-500 dark:text-gray-400 italic">
               Belum di konfirmasi
             </span>
           );
@@ -147,7 +147,7 @@ export default function DataIncoming() {
          // Null check untuk mencegah error
          if (!item) {
            return (
-             <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+             <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
                menunggu
              </span>
            );
@@ -161,12 +161,12 @@ export default function DataIncoming() {
             <span
               className={`px-3 py-1 rounded-full text-sm font-medium ${
                 item.status_terima === "diterima"
-                  ? "bg-green-100 text-green-800"
+                  ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
                   : item.status_terima === "ditolak"
-                  ? "bg-red-100 text-red-800"
+                  ? "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
                   : item.status_terima === null
-                  ? "bg-yellow-100 text-yellow-800"
-                  : "bg-gray-100 text-gray-800"
+                  ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
               }`}
             >
               {text}

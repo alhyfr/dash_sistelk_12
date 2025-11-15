@@ -32,6 +32,16 @@ api.interceptors.response.use(
     (error) => {
         // Handle 401 - clear token and redirect
         if (error.response?.status === 401) {
+            // Jangan redirect jika sudah di halaman login untuk menghindari infinite loop
+            const currentPath = window.location.pathname;
+            if (currentPath === '/login' || currentPath.startsWith('/login')) {
+                // Hanya clear token, jangan redirect
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                return Promise.reject(error);
+            }
+            
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             // Clear cookies

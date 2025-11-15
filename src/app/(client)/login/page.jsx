@@ -48,10 +48,10 @@ export default function Login() {
 
   return (
     <FadePageIn>
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Card Container */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-red-700 to-red-600 px-8 py-6 text-center">
             <h1 className="text-2xl font-bold text-white mb-2">SISTELK12</h1>
@@ -61,7 +61,7 @@ export default function Login() {
           <div className="px-8 py-6">
             {/* Error Message */}
             {error && (
-              <div className="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-lg text-sm">
+              <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-300 dark:border-red-800 text-red-700 dark:text-red-300 rounded-lg text-sm">
                 {error}
               </div>
             )}
@@ -71,7 +71,7 @@ export default function Login() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
                   Email
                 </label>
@@ -82,12 +82,12 @@ export default function Login() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-400 rounded-lg bg-white dark:bg-white text-gray-900 dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 outline-none"
                     placeholder="Masukkan email Anda"
                     required
                   />
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                    <User2 className="h-5 w-5 text-gray-400" />
+                    <User2 className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                   </div>
                 </div>
               </div>
@@ -96,7 +96,7 @@ export default function Login() {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
                   Password
                 </label>
@@ -107,19 +107,19 @@ export default function Login() {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-400 rounded-lg bg-white dark:bg-white text-gray-900 dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 outline-none"
                     placeholder="Masukkan password Anda"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-gray-600"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-gray-600 dark:hover:text-gray-400"
                   >
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5 text-gray-400" />
+                      <EyeOff className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                     ) : (
-                      <Eye className="h-5 w-5 text-gray-400" />
+                      <Eye className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                     )}
                   </button>
                 </div>
@@ -132,18 +132,18 @@ export default function Login() {
                     id="remember"
                     name="remember"
                     type="checkbox"
-                    className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 dark:border-gray-600 rounded"
                   />
                   <label
                     htmlFor="remember"
-                    className="ml-2 block text-sm text-gray-700"
+                    className="ml-2 block text-sm text-gray-700 dark:text-gray-300"
                   >
                     Ingat saya
                   </label>
                 </div>
                 <a
                   href="#"
-                  className="text-sm text-red-600 hover:text-red-500 font-medium"
+                  className="text-sm text-red-600 dark:text-red-400 hover:text-red-500 dark:hover:text-red-300 font-medium"
                 >
                   Lupa password?
                 </a>
@@ -168,7 +168,7 @@ export default function Login() {
         </div>
         {/* Footer */}
         <div className="mt-8 text-center">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-gray-500 dark:text-gray-400">
             © 2024 SistelK12. Semua hak dilindungi.
           </p>
         </div>

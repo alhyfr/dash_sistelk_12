@@ -88,7 +88,7 @@ export default function Modal({
   }
 
   // Build className for modal
-  const modalClassName = `relative w-full transform overflow-hidden rounded-lg bg-white shadow-xl transition-all ${
+  const modalClassName = `relative w-full transform overflow-hidden rounded-lg bg-white dark:bg-slate-800 shadow-xl transition-all ${
     !width && !maxWidth ? sizeClasses[size] : ''
   } ${!height && !maxHeight ? 'max-h-[90vh]' : ''}`
 
@@ -110,7 +110,7 @@ export default function Modal({
       
       {/* Modal */}
       <div 
-        className={`${modalClassName} overflow-y-auto transition-all duration-300 ease-out transform relative z-10 ${
+        className={`${modalClassName} flex flex-col transition-all duration-300 ease-out transform relative z-10 ${
           isAnimating 
             ? 'opacity-100 scale-100 translate-y-0' 
             : 'opacity-0 scale-95 translate-y-4'
@@ -118,23 +118,23 @@ export default function Modal({
         style={customStyles}
         onClick={(e) => e.stopPropagation()}
       >
-          {/* Header */}
-          <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-            <h3 className="text-lg font-semibold text-gray-900">
+          {/* Header - Fixed */}
+          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 px-6 py-4 bg-white dark:bg-slate-800 sticky top-0 z-10 flex-shrink-0">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               {title}
             </h3>
             {showCloseButton && (
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
             )}
           </div>
 
-        {/* Content */}
-        <div className="px-6 py-4">
+        {/* Content - Scrollable */}
+        <div className="px-6 py-4 overflow-y-auto flex-1">
           {children}
         </div>
       </div>

@@ -15,7 +15,7 @@ const Input = forwardRef(({
 }, ref) => {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
         {Icon && <Icon className="w-4 h-4 inline mr-2" />}
         {label}
       </label>
@@ -26,13 +26,13 @@ const Input = forwardRef(({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 ${
-          error ? 'border-red-300' : 'border-gray-300'
+        className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-white text-gray-900 dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-red-500 ${
+          error ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-400'
         } ${className}`}
         {...props}
       />
       {error && (
-        <p className="text-red-600 text-sm mt-1">{error}</p>
+        <p className="text-red-600 dark:text-red-400 text-sm mt-1">{error}</p>
       )}
     </div>
   )

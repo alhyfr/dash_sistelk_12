@@ -241,11 +241,11 @@ export default function DataTable({
     if (!sortable) return null
     
     if (sortField !== field) {
-      return <ArrowUpDown className="w-4 h-4 text-gray-400" />
+      return <ArrowUpDown className="w-4 h-4 text-gray-400 dark:text-gray-500" />
     }
     return sortDirection === 'asc' 
-      ? <ArrowUp className="w-4 h-4 text-red-600" />
-      : <ArrowDown className="w-4 h-4 text-red-600" />
+      ? <ArrowUp className="w-4 h-4 text-red-600 dark:text-red-400" />
+      : <ArrowDown className="w-4 h-4 text-red-600 dark:text-red-400" />
   }
 
   const renderCell = (item, column) => {
@@ -305,14 +305,14 @@ export default function DataTable({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
-          <p className="text-gray-600">{subtitle}</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{title}</h2>
+          <p className="text-gray-600 dark:text-gray-400">{subtitle}</p>
         </div>
         <div className="flex items-center gap-2">
           {onExport && (
             <button 
               onClick={onExport}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center gap-2"
             >
               <Download className="w-4 h-4" />
               Export
@@ -332,19 +332,19 @@ export default function DataTable({
 
       {/* Search and Filters */}
       {(searchable || filterable) && (
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Search */}
             {searchable && (
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-4 h-4" />
                   <input
                     type="text"
                     placeholder="Cari data..."
                     value={searchTerm}
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-400 rounded-lg bg-white dark:bg-white text-gray-900 dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-500 focus:ring-2 focus:ring-red-500 focus:border-red-500"
                   />
                 </div>
               </div>
@@ -354,7 +354,7 @@ export default function DataTable({
             {filterable && (
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center gap-2"
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 flex items-center gap-2"
               >
                 <Filter className="w-4 h-4" />
                 Filter
@@ -364,17 +364,17 @@ export default function DataTable({
 
           {/* Advanced Filters */}
           {showFilters && filterable && (
-            <div className="mt-4 pt-4 border-t border-gray-200">
+            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {columns.filter(col => col.filterable !== false && col.filterOptions).map(column => (
                   <div key={column.key}>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                       {column.title}
                     </label>
                     <select
                       value={filters[column.key] || ''}
                       onChange={(e) => handleFilterChange(column.key, e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-400 rounded-lg bg-white dark:bg-white text-gray-900 dark:text-gray-900 focus:ring-2 focus:ring-red-500 focus:border-red-500"
                     >
                       <option value="">Semua {column.title}</option>
                       {column.filterOptions?.map(option => (
@@ -393,9 +393,9 @@ export default function DataTable({
 
       {/* Bulk Actions */}
       {selectedItems.length > 0 && selectable && onBulkDelete && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
           <div className="flex items-center justify-between">
-            <span className="text-red-800 font-medium">
+            <span className="text-red-800 dark:text-red-300 font-medium">
               {selectedItems.length} item dipilih
             </span>
             <div className="flex items-center gap-2">
@@ -408,7 +408,7 @@ export default function DataTable({
               </button>
               <button
                 onClick={() => setSelectedItems([])}
-                className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors"
+                className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               >
                 Batal
               </button>
@@ -418,19 +418,19 @@ export default function DataTable({
       )}
 
       {/* Data Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden relative">
+      <div className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden relative">
         {(loading || isTyping) && (
-          <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center py-16 z-10">
+          <div className="absolute inset-0 bg-white dark:bg-slate-800 bg-opacity-90 dark:bg-opacity-90 flex items-center justify-center py-16 z-10">
             <div className="flex flex-col items-center space-y-4">
               <div className="relative">
                 <div className="w-10 h-10 border-4 border-red-100 rounded-full"></div>
                 <div className="w-10 h-10 border-4 border-red-600 border-t-transparent rounded-full animate-spin absolute top-0 left-0"></div>
               </div>
               <div className="text-center">
-                <span className="text-gray-600 text-sm font-medium block">
+                <span className="text-gray-600 dark:text-gray-300 text-sm font-medium block">
                   {isTyping ? 'Mencari data...' : 'Memuat data...'}
                 </span>
-                <span className="text-gray-400 text-xs mt-1">
+                <span className="text-gray-400 dark:text-gray-500 text-xs mt-1">
                   {isTyping ? 'Sedang mencari...' : 'Mohon tunggu sebentar'}
                 </span>
               </div>
@@ -439,7 +439,7 @@ export default function DataTable({
         )}
         <div className={`overflow-x-auto ${(loading || isTyping) ? 'blur-sm opacity-50' : ''}`}>
           <table className="w-full">
-            <thead className="bg-gray-50">
+            <thead className="bg-gray-50 dark:bg-slate-700">
               <tr>
                 {selectable && (
                   <th className="px-6 py-3 text-left">
@@ -447,15 +447,15 @@ export default function DataTable({
                       type="checkbox"
                       checked={selectedItems.length === currentData.length && currentData.length > 0}
                       onChange={(e) => handleSelectAll(e.target.checked)}
-                      className="rounded border-gray-300 text-red-600 focus:ring-red-500"
+                      className="rounded border-gray-300 dark:border-gray-600 text-red-600 focus:ring-red-500 bg-white dark:bg-slate-700"
                     />
                   </th>
                 )}
                 {columns.map((column) => (
                   <th 
                     key={column.key}
-                    className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
-                      sortable && column.sortable !== false ? 'cursor-pointer hover:bg-gray-100' : ''
+                    className={`px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider ${
+                      sortable && column.sortable !== false ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600' : ''
                     } ${column.type === 'actions' ? 'text-right' : ''}`}
                     onClick={() => sortable && column.sortable !== false && column.type !== 'actions' && handleSort(column.key)}
                   >
@@ -467,11 +467,11 @@ export default function DataTable({
                 ))}
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-gray-700">
               {currentData.map((item, index) => (
                 <tr 
                   key={item.id} 
-                  className="hover:bg-gray-50"
+                  className="hover:bg-gray-50 dark:hover:bg-slate-700"
                 >
                   {selectable && (
                     <td className="px-6 py-4">
@@ -479,14 +479,14 @@ export default function DataTable({
                         type="checkbox"
                         checked={selectedItems.includes(item.id)}
                         onChange={(e) => handleSelectItem(item.id, e.target.checked)}
-                        className="rounded border-gray-300 text-red-600 focus:ring-red-500"
+                        className="rounded border-gray-300 dark:border-gray-600 text-red-600 focus:ring-red-500 bg-white dark:bg-slate-700"
                       />
                     </td>
                   )}
                   {columns.map((column) => (
                     <td 
                       key={column.key} 
-                      className={`px-6 py-4 ${column.wrap ? 'whitespace-normal break-words' : 'whitespace-nowrap'} ${column.type === 'actions' ? 'text-right' : ''}`}
+                      className={`px-6 py-4 text-gray-900 dark:text-gray-100 ${column.wrap ? 'whitespace-normal break-words' : 'whitespace-nowrap'} ${column.type === 'actions' ? 'text-right' : ''}`}
                       style={{
                         ...(column.minWidth && { minWidth: column.minWidth }),
                         ...(column.maxWidth && { maxWidth: column.maxWidth })
@@ -503,26 +503,26 @@ export default function DataTable({
 
         {/* Pagination */}
         {pagination && (
-          <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+          <div className="bg-white dark:bg-slate-800 px-4 py-3 flex items-center justify-between border-t border-gray-200 dark:border-gray-700 sm:px-6">
             <div className="flex-1 flex justify-between sm:hidden">
                   <button
                     onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Previous
                   </button>
                   <button
                     onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
-                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Next
                   </button>
             </div>
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-gray-700 dark:text-gray-300">
                   Menampilkan <span className="font-medium">{startIndex + 1}</span> sampai{' '}
                   <span className="font-medium">{Math.min(endIndex, filteredData.length)}</span> dari{' '}
                   <span className="font-medium">{filteredData.length}</span> hasil
@@ -530,11 +530,11 @@ export default function DataTable({
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-700">Items per page:</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">Items per page:</span>
                   <select
                     value={itemsPerPage}
                     onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
-                    className="px-2 py-1 border border-gray-300 rounded text-sm"
+                    className="px-2 py-1 border border-gray-300 dark:border-gray-400 rounded text-sm bg-white dark:bg-white text-gray-900 dark:text-gray-900"
                   >
                     {itemsPerPageOptions.map(option => (
                       <option key={option} value={option}>{option}</option>
@@ -545,7 +545,7 @@ export default function DataTable({
                   <button
                     onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="p-2 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
@@ -556,7 +556,7 @@ export default function DataTable({
                       className={`px-3 py-2 text-sm border rounded ${
                         page === currentPage
                           ? 'bg-red-600 text-white border-red-600'
-                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                          : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-slate-600'
                       }`}
                     >
                       {page}
@@ -565,7 +565,7 @@ export default function DataTable({
                   <button
                     onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
-                    className="p-2 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>
