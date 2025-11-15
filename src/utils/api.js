@@ -2,7 +2,8 @@ import axios from "axios";
 
 // Create axios instance
 const api = axios.create({
-    baseURL: "http://localhost:3005",
+    // baseURL: "http://localhost:3005",
+    baseURL: "https://rest1.sistelk.id",
     headers: {
         "Content-Type": "application/json",
     },
