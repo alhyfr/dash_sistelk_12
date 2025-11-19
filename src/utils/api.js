@@ -14,7 +14,7 @@ const api = axios.create({
 api.interceptors.request.use(
     (config) => {
         // Get token from localStorage
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -33,25 +33,28 @@ api.interceptors.response.use(
     (error) => {
         // Handle 401 - clear token and redirect
         if (error.response?.status === 401) {
-            // Jangan redirect jika sudah di halaman login untuk menghindari infinite loop
             const currentPath = window.location.pathname;
-            if (currentPath === '/login' || currentPath.startsWith('/login')) {
+            const publicRoutes = ["/login", "/esurat", "/forgot-password", "/reset-password", "/documail"];
+            
+            // Check if current path is a public route
+            const isPublicRoute = publicRoutes.some(route => currentPath === route || currentPath.startsWith(route + "/"));
+
+            if (isPublicRoute) {
                 // Hanya clear token, jangan redirect
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
                 return Promise.reject(error);
             }
             
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
             // Clear cookies
-            document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-            window.location.replace('/login');
+            document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            window.location.replace("/login");
         }
         return Promise.reject(error);
     }
 );
 
 export default api;
-
