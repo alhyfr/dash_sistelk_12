@@ -82,7 +82,22 @@ const constraints = {
       maximum: 10485760, // 10MB
       message: "^Ukuran file lampiran maksimal 10MB"
     }
-  }
+  },
+  kodejab: {
+    presence: { allowEmpty: false, message: "^Kode Jabatan wajib diisi" },
+  },
+  jabatan: {
+    presence: { allowEmpty: false, message: "^Jabatan wajib diisi" },
+  },
+  nip: {
+    presence: { allowEmpty: false, message: "^NIP wajib diisi" },
+  },
+  nama: {
+    presence: { allowEmpty: false, message: "^Nama wajib diisi" },
+  },
+  unit: {
+    presence: { allowEmpty: false, message: "^Unit wajib diisi" },
+  },
 }
 
 export default constraints

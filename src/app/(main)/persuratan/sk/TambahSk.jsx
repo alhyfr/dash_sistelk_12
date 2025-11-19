@@ -9,9 +9,195 @@ import FileUpload from '@/components/FileUpload'
 import Button from '@/components/Button'
 import constraints from '@/utils/constraints'
 import validate from 'validate.js'
-import {useData} from '@/context/DataContext'
+import { useData } from '@/context/DataContext'
 import dayjs from 'dayjs'
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 
+// ========================================
+// TipTap Editor Component with Dark Mode
+// ========================================
+const TipTapEditor = ({ 
+  name,
+  label, 
+  value, 
+  onChange, 
+  error,
+  placeholder = 'Ketik di sini...',
+  required = false 
+}) => {
+  const editor = useEditor({
+    immediatelyRender: false, // Fix SSR for Next.js
+    extensions: [
+      StarterKit.configure({
+        bulletList: {
+          keepMarks: true,
+          keepAttributes: false,
+        },
+        orderedList: {
+          keepMarks: true,
+          keepAttributes: false,
+        },
+      }),
+    ],
+    content: value || '',
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML()
+      onChange({ target: { name, value: html } })
+    },
+    editorProps: {
+      attributes: {
+        class: 'prose prose-sm dark:prose-invert max-w-none focus:outline-none min-h-[120px] p-3',
+      },
+    },
+  })
+
+  useEffect(() => {
+    if (editor && value !== undefined && value !== editor.getHTML()) {
+      editor.commands.setContent(value || '')
+    }
+  }, [value, editor])
+
+  if (!editor) {
+    return null
+  }
+
+  return (
+    <div className="w-full" data-error={!!error}>
+      {/* Label */}
+      {label && (
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          {label}
+          {required && <span className="text-red-500 dark:text-red-400 ml-1">*</span>}
+        </label>
+      )}
+      
+      {/* Toolbar */}
+      <div className={`border ${error ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'} rounded-t-lg bg-gray-50 dark:bg-gray-800 px-3 py-2 flex flex-wrap gap-1`}>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={`px-3 py-1.5 text-sm rounded transition-colors ${
+            editor.isActive('bulletList') 
+              ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-semibold' 
+              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+          }`}
+          title="Bullet List"
+        >
+          • List
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={`px-3 py-1.5 text-sm rounded transition-colors ${
+            editor.isActive('orderedList') 
+              ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-semibold' 
+              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+          }`}
+          title="Numbered List"
+        >
+          1. List
+        </button>
+        <div className="w-px bg-gray-300 dark:bg-gray-600 mx-1"></div>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={`px-3 py-1.5 text-sm font-bold rounded transition-colors ${
+            editor.isActive('bold') 
+              ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300' 
+              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+          }`}
+          title="Bold"
+        >
+          B
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={`px-3 py-1.5 text-sm italic rounded transition-colors ${
+            editor.isActive('italic') 
+              ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300' 
+              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+          }`}
+          title="Italic"
+        >
+          I
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setParagraph().run()}
+          className={`px-3 py-1.5 text-sm rounded transition-colors ${
+            editor.isActive('paragraph') 
+              ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300' 
+              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+          }`}
+          title="Normal Text"
+        >
+          P
+        </button>
+      </div>
+
+      {/* Editor Content */}
+      <div 
+        className={`border-x border-b ${error ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'} rounded-b-lg bg-white dark:bg-gray-900 overflow-hidden`}
+      >
+        <EditorContent editor={editor} className="tiptap-editor" />
+      </div>
+
+      {/* Error Message */}
+      {error && (
+        <p className="mt-1 text-sm text-red-600 dark:text-red-400">{error}</p>
+      )}
+
+      {/* Placeholder hint */}
+      {!value && placeholder && (
+        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{placeholder}</p>
+      )}
+
+      {/* Custom styles for editor */}
+      <style jsx global>{`
+        .tiptap-editor .ProseMirror {
+          min-height: 120px;
+          color: inherit;
+        }
+        .tiptap-editor .ProseMirror:focus {
+          outline: none;
+        }
+        .tiptap-editor .ProseMirror ul,
+        .tiptap-editor .ProseMirror ol {
+          padding-left: 1.5rem;
+          margin: 0.5rem 0;
+        }
+        .tiptap-editor .ProseMirror ul li {
+          list-style-type: disc;
+        }
+        .tiptap-editor .ProseMirror ol li {
+          list-style-type: decimal;
+        }
+        .tiptap-editor .ProseMirror li {
+          margin: 0.25rem 0;
+        }
+        .tiptap-editor .ProseMirror p {
+          margin: 0.5rem 0;
+        }
+        .tiptap-editor .ProseMirror strong {
+          font-weight: 600;
+        }
+        .tiptap-editor .ProseMirror em {
+          font-style: italic;
+        }
+        /* Dark mode text color */
+        .dark .tiptap-editor .ProseMirror {
+          color: #e5e7eb;
+        }
+      `}</style>
+    </div>
+  )
+}
+
+// ========================================
+// Main TambahSk Component
+// ========================================
 export default function TambahSk({ 
   onClose = null, 
   onSuccess = null, 
@@ -26,7 +212,7 @@ export default function TambahSk({
     menimbang: '',
     mengingat: '',
     memperhatikan: '',
-    menetapkan:'',
+    menetapkan: '',
     satu: '',
     dua: '',
     tiga: '',
@@ -35,21 +221,18 @@ export default function TambahSk({
     tembusan: '',
     unit: '',
     lampiran: null,
-    existingLampiran: null, // Untuk menyimpan path lampiran yang sudah ada saat edit mode
+    existingLampiran: null,
   })
 
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState({})
- 
 
   // ✅ Load data saat edit mode
   useEffect(() => {
     if (isEditMode && editingSk) {
-      // Konversi format tanggal dari API ke format YYYY-MM-DD untuk DatePicker
       let formattedTgl = ''
       if (editingSk.tgl) {
         try {
-          // Coba parse dengan dayjs, jika berhasil format ke YYYY-MM-DD
           const parsedDate = dayjs(editingSk.tgl)
           if (parsedDate.isValid()) {
             formattedTgl = parsedDate.format('YYYY-MM-DD')
@@ -68,7 +251,7 @@ export default function TambahSk({
         menimbang: editingSk.menimbang || '',
         mengingat: editingSk.mengingat || '',
         memperhatikan: editingSk.memperhatikan || '',
-        menetapkan:editingSk.menetapkan || '',
+        menetapkan: editingSk.menetapkan || '',
         satu: editingSk.satu || '',
         dua: editingSk.dua || '',
         tiga: editingSk.tiga || '',
@@ -76,8 +259,8 @@ export default function TambahSk({
         lokasi: editingSk.lokasi || '',
         tembusan: editingSk.tembusan || '',
         unit: editingSk.unit || '',
-        lampiran: null, // Set null untuk lampiran, karena FileUpload tidak bisa handle string path
-        existingLampiran: editingSk.lampiran || null, // Simpan path lampiran yang sudah ada
+        lampiran: null,
+        existingLampiran: editingSk.lampiran || null,
       })
     }
   }, [isEditMode, editingSk])
@@ -90,7 +273,6 @@ export default function TambahSk({
       [name]: value
     }))
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -99,20 +281,16 @@ export default function TambahSk({
     }
   }
 
-  // ✅ Handler khusus untuk file upload dengan validasi real-time
+  // ✅ Handler khusus untuk file upload
   const handleFileChange = (event) => {
-    // Reset error lampiran dulu
     setErrors(prev => ({
       ...prev,
       lampiran: undefined
     }))
 
-    // Handle event object dari FileUpload atau file langsung
     let file = null
     if (event && event.target) {
-      // Jika event object dari FileUpload
       file = event.target.value
-      // Handle error dari FileUpload
       if (event.target.error) {
         setErrors(prev => ({
           ...prev,
@@ -121,14 +299,11 @@ export default function TambahSk({
         return
       }
     } else if (event instanceof File || event instanceof Blob) {
-      // Jika langsung file object
       file = event
     } else {
-      // Jika null atau undefined
       file = null
     }
 
-    // Jika tidak ada file (user cancel/clear), set null
     if (!file) {
       setFormData(prev => ({
         ...prev,
@@ -137,7 +312,6 @@ export default function TambahSk({
       return
     }
 
-    // Validasi bahwa file adalah instance File/Blob dan memiliki name
     if (!(file instanceof File) && !(file instanceof Blob)) {
       setErrors(prev => ({
         ...prev,
@@ -146,7 +320,6 @@ export default function TambahSk({
       return
     }
 
-    // Validasi bahwa file memiliki name property
     if (!file.name || typeof file.name !== 'string') {
       setErrors(prev => ({
         ...prev,
@@ -155,7 +328,6 @@ export default function TambahSk({
       return
     }
 
-    // Validasi file type
     const fileName = file.name.toLowerCase()
     const allowedExtensions = ['doc', 'docx', 'pdf']
     const fileExtension = fileName.split('.').pop()
@@ -168,8 +340,7 @@ export default function TambahSk({
       return
     }
 
-    // Validasi file size (10MB)
-    const maxSize = 10 * 1024 * 1024 // 10MB
+    const maxSize = 10 * 1024 * 1024
     if (file.size && file.size > maxSize) {
       setErrors(prev => ({
         ...prev,
@@ -178,30 +349,58 @@ export default function TambahSk({
       return
     }
 
-    // Jika lolos validasi, set file
     setFormData(prev => ({
       ...prev,
       lampiran: file
     }))
   }
 
-  // ✅ Validasi form menggunakan validate.js
+  // ✅ Validasi form dengan HTML content check
   const validateForm = () => {
-    const validation = validate(formData, constraints)
+    const validateHtmlContent = (value) => {
+      if (!value || value.trim() === '' || value === '<p></p>' || value === '<p><br></p>') {
+        return false
+      }
+      const textContent = value.replace(/<[^>]*>/g, '').trim()
+      return textContent.length > 0
+    }
+
+    const dataToValidate = { ...formData }
+    const htmlErrors = {}
+
+    if (!validateHtmlContent(formData.menimbang)) {
+      htmlErrors.menimbang = 'Menimbang wajib diisi'
+    }
+    if (!validateHtmlContent(formData.mengingat)) {
+      htmlErrors.mengingat = 'Mengingat wajib diisi'
+    }
+    if (!validateHtmlContent(formData.memperhatikan)) {
+      htmlErrors.memperhatikan = 'Memperhatikan wajib diisi'
+    }
+    if (!validateHtmlContent(formData.menetapkan)) {
+      htmlErrors.menetapkan = 'Menetapkan wajib diisi'
+    }
+
+    const validation = validate(dataToValidate, constraints)
+    
+    let allErrors = { ...htmlErrors }
     
     if (validation) {
-      // Convert validate.js format to our error format
-      const formattedErrors = {}
       Object.keys(validation).forEach(key => {
-        if (Array.isArray(validation[key])) {
-          formattedErrors[key] = validation[key][0]
-        } else if (typeof validation[key] === 'object' && validation[key].message) {
-          formattedErrors[key] = validation[key].message
-        } else {
-          formattedErrors[key] = validation[key]
+        if (!['menimbang', 'mengingat', 'memperhatikan', 'menetapkan'].includes(key)) {
+          if (Array.isArray(validation[key])) {
+            allErrors[key] = validation[key][0]
+          } else if (typeof validation[key] === 'object' && validation[key].message) {
+            allErrors[key] = validation[key].message
+          } else {
+            allErrors[key] = validation[key]
+          }
         }
       })
-      setErrors(formattedErrors)
+    }
+
+    if (Object.keys(allErrors).length > 0) {
+      setErrors(allErrors)
       return false
     }
 
@@ -213,9 +412,7 @@ export default function TambahSk({
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // Validasi form
     if (!validateForm()) {
-      // Scroll ke error pertama
       const firstErrorField = document.querySelector('[data-error="true"]')
       if (firstErrorField) {
         firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' })
@@ -230,10 +427,8 @@ export default function TambahSk({
       let submitData
       const ensureString = (value) => value == null ? "" : String(value)
 
-      // Cek apakah ada file baru yang diupload
       const hasNewFile = formData.lampiran && formData.lampiran instanceof File
       
-      // Jika ada file baru atau mode edit dengan file baru, gunakan FormData
       if (hasNewFile) {
         submitData = new FormData()
         submitData.append('tgl', ensureString(formData.tgl))
@@ -251,7 +446,6 @@ export default function TambahSk({
         submitData.append('unit', ensureString(formData.unit))
         submitData.append('lampiran', formData.lampiran)
       } else {
-        // Jika tidak ada file baru, gunakan JSON object biasa
         submitData = {
           tgl: ensureString(formData.tgl),
           tentang: ensureString(formData.tentang),
@@ -268,30 +462,23 @@ export default function TambahSk({
           unit: ensureString(formData.unit),
         }
         
-        // Jika mode edit dan ada existing lampiran (tidak ada file baru), kirim existing lampiran
         if (isEditMode && formData.existingLampiran && !hasNewFile) {
           submitData.lampiran = formData.existingLampiran
         }
       }
 
-      // Panggil API
       if (postSk) await postSk(submitData)
       
-      // Callback success
       if (onSuccess) onSuccess(submitData)
       
-      // Close modal/form
       if (onClose) onClose()
 
     } catch (error) {
       console.error('Error saving SK:', error)
       
-      // Handle error dari backend
       if (error.response?.data?.errors) {
-        // Jika backend return validation errors
         setErrors(error.response.data.errors)
       } else {
-        // Generic error
         const errorMessage = error.response?.data?.message || 
                            error.message || 
                            'Terjadi kesalahan saat menyimpan data'
@@ -301,7 +488,8 @@ export default function TambahSk({
       setLoading(false)
     }
   }
-  // ✅ Reset form saat keluar dari edit mode (editingSk menjadi null)
+
+  // ✅ Reset form saat keluar dari edit mode
   useEffect(() => {
     if (!isEditMode && !editingSk) {
       setFormData({
@@ -310,7 +498,7 @@ export default function TambahSk({
         menimbang: '',
         mengingat: '',
         memperhatikan: '',
-        menetapkan:'',
+        menetapkan: '',
         satu: '',
         dua: '',
         tiga: '',
@@ -325,7 +513,7 @@ export default function TambahSk({
     }
   }, [isEditMode, editingSk])
 
-  // ✅ Update unit saat units sudah ter-load (hanya untuk mode tambah baru)
+  // ✅ Update unit saat units sudah ter-load
   useEffect(() => {
     if (!isEditMode && !editingSk && units?.role_name) {
       setFormData(prev => ({
@@ -337,15 +525,15 @@ export default function TambahSk({
 
   return (
     <div className="max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
         {isEditMode ? 'Edit SK' : 'Tambah SK'}
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* ✅ General Error */}
         {errors.general && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-800 text-sm font-medium">❌ {errors.general}</p>
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+            <p className="text-red-800 dark:text-red-400 text-sm font-medium">❌ {errors.general}</p>
           </div>
         )}
 
@@ -372,52 +560,48 @@ export default function TambahSk({
             data-error={!!errors.tentang}
           />
 
-         
-
-          {/* Menimbang */}
-          <Textarea
+          {/* Menimbang - TipTap Editor */}
+          <TipTapEditor
             name="menimbang"
-            label="Menimbang *"
+            label="Menimbang"
             value={formData.menimbang}
             onChange={handleInputChange}
             error={errors.menimbang}
-            rows={4}
             placeholder="Masukkan pertimbangan..."
-            data-error={!!errors.menimbang}
+            required
           />
 
-          {/* Mengingat */}
-          <Textarea
+          {/* Mengingat - TipTap Editor */}
+          <TipTapEditor
             name="mengingat"
-            label="Mengingat *"
+            label="Mengingat"
             value={formData.mengingat}
             onChange={handleInputChange}
             error={errors.mengingat}
-            rows={4}
             placeholder="Masukkan dasar hukum..."
-            data-error={!!errors.mengingat}
+            required
           />
 
-          {/* Memperhatikan */}
-          <Textarea
+          {/* Memperhatikan - TipTap Editor */}
+          <TipTapEditor
             name="memperhatikan"
-            label="Memperhatikan *"
+            label="Memperhatikan"
             value={formData.memperhatikan}
             onChange={handleInputChange}
             error={errors.memperhatikan}
-            rows={4}
             placeholder="Masukkan hal yang diperhatikan..."
-            data-error={!!errors.memperhatikan}
+            required
           />
-          <Textarea
+
+          {/* Menetapkan - TipTap Editor */}
+          <TipTapEditor
             name="menetapkan"
-            label="Menetapkan *"
+            label="Menetapkan"
             value={formData.menetapkan}
             onChange={handleInputChange}
             error={errors.menetapkan}
-            rows={4}
             placeholder="Masukkan diktum menetapkan..."
-            data-error={!!errors.menetapkan}
+            required
           />
 
           {/* Satu */}
@@ -498,7 +682,7 @@ export default function TambahSk({
             value={formData.unit}
             onChange={handleInputChange}
             readOnly={true}
-            className="bg-gray-100 cursor-not-allowed"
+            className="bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
           />
 
           {/* Lampiran */}
@@ -514,7 +698,7 @@ export default function TambahSk({
         </div>
 
         {/* ✅ Action Buttons */}
-        <div className="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
+        <div className="flex items-center justify-end gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
           {onClose && (
             <Button
               type="button"

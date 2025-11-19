@@ -9,8 +9,15 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@react-pdf/renderer": "^4.3.1",
+    "@tiptap/pm": "^3.10.7",
+    "@tiptap/react": "^3.10.7",
+    "@tiptap/starter-kit": "^3.10.7",
     "axios": "^1.12.2",
     "dayjs": "^1.11.18",
+    "html-react-parser": "^5.2.8",
+    "jspdf": "^3.0.3",
+    "jspdf-autotable": "^5.0.2",
     "lucide-react": "^0.544.0",
     "next": "15.5.4",
     "qrcode.react": "^4.2.0",

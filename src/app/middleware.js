@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 // Routes that don't require authentication
-const publicRoutes = ['/login', '/esurat', '/forgot-password', '/reset-password']
+const publicRoutes = ['/login', '/esurat', '/forgot-password', '/reset-password','/documail']
 
 // Routes that require authentication
 const protectedRoutes = ['/dashboard', '/profile', '/settings', '/persuratan/sk']

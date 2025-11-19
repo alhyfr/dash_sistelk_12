@@ -9,12 +9,13 @@ import InfoKet from "@/components/InfoKet";
 import NomorSuratModal from "@/components/NomorSuratModal";
 import TambahSk from "./TambahSk";
 import Input from "@/components/Input";
-import { Eye, Edit, Trash2,TrendingUp,TrendingDown,EllipsisVertical, ReceiptText, FileText,ShieldCheck } from "lucide-react";
+import { Eye, Edit, Trash2,TrendingUp,TrendingDown,EllipsisVertical, Download, FileText,ShieldCheck } from "lucide-react";
 import api from "@/utils/api";
 import dayjs from "dayjs";
 import ViewLampiran from "./ViewLampiran";
 import { useData } from "@/context/DataContext";
 import { useRouter } from "next/navigation";
+import ModalPreviewPdf from "./ModalPreviewPdf";
 
 export default function DataSk() {
   const { units } = useData();
@@ -59,6 +60,10 @@ export default function DataSk() {
   const [nomorSuratLoading, setNomorSuratLoading] = useState(false); // Loading saat proses nomor surat
   const [generatedNomorSurat, setGeneratedNomorSurat] = useState(''); // Nomor surat yang di-generate dari API
   const [fetchingNomorSurat, setFetchingNomorSurat] = useState(false); // Loading saat fetch nomor surat
+
+  const [isPreviewPdfOpen, setIsPreviewPdfOpen] = useState(false)
+  const [selectedSkForPdf, setSelectedSkForPdf] = useState(null)
+
 
   const columns = [
     {
@@ -254,7 +259,16 @@ export default function DataSk() {
           show: (item) => {
             return units?.role_name === 'HC' && item?.status === 'proses';
           },
-        }
+        },
+        {
+          icon: Download,
+          title: "Unduh",
+          className: "text-blue-600 hover:text-blue-900",
+          onClick: (item) => handleOpenPreviewPdf(item),
+          show: (item) => {
+            return units?.role_name === item?.unit && item?.status === 'valid';
+          },
+        },
         
       ],
     },
@@ -554,6 +568,15 @@ export default function DataSk() {
     setGeneratedNomorSurat('')
     setFetchingNomorSurat(false)
   }
+ // Handler untuk membuka modal preview PDF
+ const handleOpenPreviewPdf = (sk) => {
+  setSelectedSkForPdf(sk)
+  setIsPreviewPdfOpen(true)
+}
+const handleClosePreviewPdf = () => {
+  setIsPreviewPdfOpen(false)
+  setSelectedSkForPdf(null)
+}
 
 
   return (
@@ -699,6 +722,12 @@ export default function DataSk() {
           </div>
         </div>
       </Modal>
+      <ModalPreviewPdf
+        isOpen={isPreviewPdfOpen}
+        onClose={handleClosePreviewPdf}
+        sk={selectedSkForPdf}
+      />
+
     </div>
   );
 }

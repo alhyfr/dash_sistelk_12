@@ -21,7 +21,7 @@ export default function SK() {
   return (
     <ProtectedRoute>
       <FadePageIn>
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div className="min-h-screen p-6 text-slate-500 dark:text-slate-400">
         <div className="mb-6">
           <Breadcrumbs items={breadcrumbItems} />
         </div>

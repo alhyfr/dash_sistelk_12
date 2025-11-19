@@ -7,6 +7,7 @@ import Breadcrumbs from '@/components/Breadcrumbs'
 import { ArrowLeft, FileText, Calendar, Building2, MapPin, Mail, File, AlertCircle } from 'lucide-react'
 import dayjs from 'dayjs'
 import ViewLampiran from '../ViewLampiran'
+import parse from 'html-react-parser'
 
 export default function DetailSK() {
   const params = useParams()
@@ -117,7 +118,7 @@ export default function DetailSK() {
           </div>
 
           {/* Header */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+          <div className="bg-white  rounded-lg shadow-sm border border-gray-200 mb-6">
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -175,7 +176,7 @@ export default function DetailSK() {
                   </div>
                   <div className="md:col-span-2">
                     <label className="text-sm font-medium text-gray-500">Tentang</label>
-                    <p className="mt-1 text-gray-900">{skData.tentang || '-'}</p>
+                    <p className="mt-1 text-gray-900">{ parse(skData.tentang) }</p>
                   </div>
                   <div className="md:col-span-2">
                     <label className="text-sm font-medium text-gray-500">Perihal</label>
@@ -185,39 +186,39 @@ export default function DetailSK() {
               </div>
 
               {/* Diktum Surat Keputusan */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="bg-white tiptap-display rounded-lg shadow-sm border border-gray-200 p-6">
                 <h2 className="text-lg font-semibold text-gray-900 mb-4">Diktum Surat Keputusan</h2>
                 <div className="space-y-4">
                   {skData.menimbang && (
                     <div>
                       <label className="text-sm font-medium text-gray-500 block mb-2">Menimbang</label>
-                      <p className="text-gray-900 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        {skData.menimbang}
-                      </p>
+                      <div className="text-gray-900 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg border border-gray-200">
+                      {skData.menimbang ? parse(skData.menimbang) : '-'}
+                      </div>
                     </div>
                   )}
                   {skData.mengingat && (
                     <div>
                       <label className="text-sm font-medium text-gray-500 block mb-2">Mengingat</label>
-                      <p className="text-gray-900 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        {skData.mengingat}
-                      </p>
+                      <div className="text-gray-900 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        { parse(skData.mengingat) }
+                      </div>
                     </div>
                   )}
                   {skData.memperhatikan && (
                     <div>
                       <label className="text-sm font-medium text-gray-500 block mb-2">Memperhatikan</label>
-                      <p className="text-gray-900 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        {skData.memperhatikan}
-                      </p>
+                      <div className="text-gray-900 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        { parse(skData.memperhatikan) }
+                      </div>
                     </div>
                   )}
                   {skData.satu && (
                     <div>
                       <label className="text-sm font-medium text-gray-500 block mb-2">Kesatu</label>
-                      <p className="text-gray-900 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg border border-gray-200">
+                      <div className="text-gray-900 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg border border-gray-200">
                         {skData.satu}
-                      </p>
+                      </div>
                     </div>
                   )}
                   {skData.dua && (

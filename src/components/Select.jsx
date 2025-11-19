@@ -10,6 +10,7 @@ const Select = forwardRef(({
   icon: Icon,
   disabled = false,
   placeholder = 'Pilih...',
+  error,
   className = '',
   ...props 
 }, ref) => {
@@ -25,7 +26,9 @@ const Select = forwardRef(({
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className={`w-full text-slate-600 dark:text-gray-900 px-3 py-2 border border-gray-300 dark:border-gray-400 rounded-lg bg-white dark:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 disabled:bg-gray-100 dark:disabled:bg-gray-200 disabled:cursor-not-allowed ${className}`}
+        className={`w-full text-slate-600 dark:text-gray-900 px-3 py-2 border rounded-lg bg-white dark:bg-white focus:ring-2 focus:ring-red-500 focus:border-red-500 disabled:bg-gray-100 dark:disabled:bg-gray-200 disabled:cursor-not-allowed ${
+          error ? 'border-red-300 dark:border-red-600' : 'border-gray-300 dark:border-gray-400'
+        } ${className}`}
         {...props}
       >
         {placeholder && (
@@ -37,6 +40,9 @@ const Select = forwardRef(({
           </option>
         ))}
       </select>
+      {error && (
+        <p className="text-red-600 dark:text-red-400 text-sm mt-1">{error}</p>
+      )}
     </div>
   )
 })

@@ -102,10 +102,10 @@ export const dropdownNavigation = [
   {
     name: "Human Capital",
     icon: BarChart3,
-    roles: ["admin", "superadmin", "hc"], // ✅ Roles yang bisa akses
+    roles: ["admin", "superadmin", "hc","HC"], // ✅ Roles yang bisa akses
     children: [
-      { name: "Student Reports", href: "/reports/students", icon: FileText },
-      { name: "Academic Reports", href: "/reports/academic", icon: BarChart3 },
+      { name: "SOTK", href: "/hc/sotk", icon: Users },
+      { name: "Kepegawaian", href: "/hc/kepegawaian", icon: BarChart3 },
       { name: "Financial Reports", href: "/reports/financial", icon: BarChart3 },
     ]
   },
