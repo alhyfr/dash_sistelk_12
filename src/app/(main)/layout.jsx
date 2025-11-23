@@ -147,15 +147,15 @@ export default function MainLayout({ children }) {
                   <button
                     onClick={() => toggleDropdown(section.name)}
                     className={`group w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-between'} px-3 py-2 text-sm font-medium rounded-lg ${transitionClasses.menuItem} ${hasActive
-                        ? 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-300'
+                      ? 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-300'
                       }`}
                     title={sidebarCollapsed ? section.name : ''}
                   >
                     <div className="flex items-center">
                       <Icon className={`${sidebarCollapsed ? '' : 'mr-3'} h-5 w-5 ${transitionClasses.menuItem} ${hasActive
-                          ? 'text-red-600 dark:text-red-400'
-                          : 'text-gray-400 dark:text-gray-500 group-hover:text-red-500 dark:group-hover:text-red-400'
+                        ? 'text-red-600 dark:text-red-400'
+                        : 'text-gray-400 dark:text-gray-500 group-hover:text-red-500 dark:group-hover:text-red-400'
                         }`} />
                       {!sidebarCollapsed && section.name}
                     </div>
@@ -178,16 +178,16 @@ export default function MainLayout({ children }) {
                               key={child.name}
                               href={child.href}
                               className={`group flex items-center px-3 py-2 text-sm rounded-lg ${transitionClasses.menuItem} ${transitionClasses.staggerChild} ${getStaggerDelay(index)} ${isChildActive
-                                  ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-r-2 border-red-600 dark:border-red-500'
-                                  : 'text-gray-600 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-300'
+                                ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-r-2 border-red-600 dark:border-red-500'
+                                : 'text-gray-600 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-300'
                                 }`}
                               style={{
                                 animationDelay: isOpen ? `${index * 50}ms` : '0ms'
                               }}
                             >
                               <ChildIcon className={`mr-3 h-4 w-4 ${transitionClasses.menuItem} ${isChildActive
-                                  ? 'text-red-600 dark:text-red-400'
-                                  : 'text-gray-400 dark:text-gray-500 group-hover:text-red-500 dark:group-hover:text-red-400'
+                                ? 'text-red-600 dark:text-red-400'
+                                : 'text-gray-400 dark:text-gray-500 group-hover:text-red-500 dark:group-hover:text-red-400'
                                 }`} />
                               {child.name}
                             </a>
@@ -225,7 +225,7 @@ export default function MainLayout({ children }) {
       </div>
 
       {/* Main content */}
-      <div className={`transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'lg:pl-16' : 'lg:pl-64'
+      <div className={`min-h-screen flex flex-col transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'lg:pl-16' : 'lg:pl-64'
         }`}>
         {/* Header */}
         <header className="bg-white dark:bg-slate-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
@@ -326,7 +326,7 @@ export default function MainLayout({ children }) {
         </header>
 
         {/* Main content area */}
-        <main className="flex-1 p-6 h-screen">
+        <main className="flex-1 p-6">
           {children}
         </main>
 
