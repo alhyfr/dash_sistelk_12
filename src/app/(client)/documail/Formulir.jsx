@@ -1,9 +1,10 @@
 'use client'
 import { useState } from 'react'
-import { FileText, User, Upload, Save, X, Calendar } from 'lucide-react'
+import { FileText, User, Upload, Save, X, Calendar, Star } from 'lucide-react'
 import Input from '@/components/Input'
 import DatePicker from '@/components/DatePicker'
 import FileUpload from '@/components/FileUpload'
+import Rating from '@/components/Rating'
 import Image from 'next/image'
 import Stelk from '@/assets/logo/stelk.png'
 
@@ -15,6 +16,7 @@ export default function Formulir({ postSurat }) {
     perihal: '',
     kontak_person: '',
     tgl_pelaksanaan: '',
+    rate: '',
     file: null
   })
   const [loading, setLoading] = useState(false)
@@ -25,7 +27,7 @@ export default function Formulir({ postSurat }) {
 
   const handleInputChange = (e) => {
     const { name, value, error } = e.target
-    
+
     // Handle file upload errors
     if (error) {
       setErrors(prev => ({
@@ -34,12 +36,12 @@ export default function Formulir({ postSurat }) {
       }))
       return
     }
-    
+
     setFormData(prev => ({
       ...prev,
       [name]: value
     }))
-    
+
     // Clear error jika ada perubahan
     if (errors[name]) {
       setErrors(prev => ({
@@ -52,28 +54,32 @@ export default function Formulir({ postSurat }) {
 
   const validateForm = () => {
     const newErrors = {}
-    
+
     if (!formData.asal_instansi.trim()) {
       newErrors.asal_instansi = 'Asal instansi harus diisi'
     }
     if (!formData.nosurat.trim()) {
       newErrors.nosurat = 'Nomor surat harus diisi'
     }
-    
+
     if (!formData.perihal.trim()) {
       newErrors.perihal = 'Perihal harus diisi'
     }
-    
+
     if (!formData.kontak_person.trim()) {
       newErrors.kontak_person = 'Kontak person harus diisi'
     }
-    
+
     if (!formData.tgl_pelaksanaan.trim()) {
       newErrors.tgl_pelaksanaan = 'Tanggal pelaksanaan harus diisi'
     }
-    
+
     if (!formData.file) {
       newErrors.file = 'File harus diupload'
+    }
+
+    if (!formData.rate || formData.rate === 0) {
+      newErrors.rate = 'Rating harus diisi'
     }
 
     setErrors(newErrors)
@@ -82,14 +88,14 @@ export default function Formulir({ postSurat }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     if (!validateForm()) {
       return
     }
 
     setLoading(true)
     setErrors({})
-    
+
     try {
       // Buat FormData untuk upload file
       const submitData = new FormData()
@@ -98,8 +104,9 @@ export default function Formulir({ postSurat }) {
       submitData.append('perihal', formData.perihal)
       submitData.append('kontak_person', formData.kontak_person)
       submitData.append('tgl_pelaksanaan', formData.tgl_pelaksanaan)
+      submitData.append('rate', formData.rate)
       submitData.append('file', formData.file)
-      
+
       // console.log('Form data:', {
       //   asal_instansi: formData.asal_instansi,
       //   perihal: formData.perihal,
@@ -107,14 +114,14 @@ export default function Formulir({ postSurat }) {
       //   tgl_pelaksanaan: formData.tgl_pelaksanaan,
       //   file: formData.file?.name
       // })
-      
+
       // Simulasi loading 3 detik sebelum mengirim ke API
       await new Promise(resolve => setTimeout(resolve, 3000))
-      
+
       // Panggil API menggunakan postSurat dari props
       if (postSurat) {
         const result = await postSurat(submitData)
-        
+
         if (result.success) {
           // Reset form setelah berhasil
           setFormData({
@@ -123,16 +130,17 @@ export default function Formulir({ postSurat }) {
             perihal: '',
             kontak_person: '',
             tgl_pelaksanaan: '',
+            rate: '',
             file: null
           })
-          
+
         } else {
           setErrors({ general: result.message || 'Terjadi kesalahan saat mengirim formulir' })
         }
       } else {
         throw new Error('postSurat function tidak tersedia')
       }
-      
+
     } catch (error) {
       console.error('Error submitting form:', error)
       setErrors({ general: 'Terjadi kesalahan saat mengirim formulir' })
@@ -148,6 +156,7 @@ export default function Formulir({ postSurat }) {
       perihal: '',
       kontak_person: '',
       tgl_pelaksanaan: '',
+      rate: '',
       file: null
     })
     setErrors({})
@@ -213,9 +222,8 @@ export default function Formulir({ postSurat }) {
                 value={formData.perihal}
                 onChange={handleInputChange}
                 rows={4}
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none ${
-                  errors.perihal ? 'border-red-300' : 'border-gray-300'
-                }`}
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 resize-none ${errors.perihal ? 'border-red-300' : 'border-gray-300'
+                  }`}
                 placeholder="Masukkan perihal surat..."
               />
               {errors.perihal && (
@@ -264,6 +272,14 @@ export default function Formulir({ postSurat }) {
               sizeText="hingga 10MB"
               showFileInfo={true}
             />
+            <Rating
+              name="rate"
+              label="Beri Rating"
+              value={formData.rate}
+              onChange={handleInputChange}
+              error={errors.rate}
+              required={true}
+            />
 
             {/* Action Buttons */}
             <div className="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
@@ -277,7 +293,7 @@ export default function Formulir({ postSurat }) {
               </button>
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !formData.rate || formData.rate === 0}
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
@@ -288,7 +304,7 @@ export default function Formulir({ postSurat }) {
                 ) : (
                   <>
                     <Save className="w-4 h-4" />
-                    Kirim Formulir
+                    {!formData.rate || formData.rate === 0 ? 'Isi Rating Terlebih Dahulu' : 'Kirim Formulir'}
                   </>
                 )}
               </button>

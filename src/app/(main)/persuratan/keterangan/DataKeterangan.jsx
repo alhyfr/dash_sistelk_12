@@ -116,7 +116,6 @@ export default function DataKeterangan() {
             render: (_, item) => (
                 <div className="flex items-center gap-2">
                     <PdfKet item={item} kepsek={kepsek} ta={ta} />
-                    {kepsek.nip}
                 </div>
             )
         },

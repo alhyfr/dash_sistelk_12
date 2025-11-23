@@ -143,7 +143,7 @@ export default function PdfKet({ item, kepsek, ta }) {
         yPos = doc.lastAutoTable.finalY + 8
 
         // Paragraf penutup
-        const penutupText = `Benar bahwa yang bersangkutan adalah siswa SMK Telkom Makassar, saat ini masih aktif menempuh pendidikan di  kelas ${item.kelas || '-'} pada tahun pelajaran ${item.tahun || '-'}.`
+        const penutupText = `Benar bahwa yang bersangkutan adalah siswa SMK Telkom Makassar, saat ini masih aktif menempuh pendidikan di  kelas ${item.kelas || '-'} pada tahun pelajaran ${ta.ta || '-'}.`
         const penutupLines = doc.splitTextToSize(penutupText, pageWidth - (margin * 2))
         penutupLines.forEach(line => {
             doc.text(line, margin, yPos)

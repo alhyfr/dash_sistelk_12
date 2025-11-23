@@ -95,7 +95,7 @@ export default function DataIncoming() {
       title: "Asal Instansi", // 🔧 GANTI: judul kolom
       searchable: true,
       sortable: true,
-      
+
     },
     {
       key: "perihal", // 🔧 GANTI: field dari API response
@@ -104,7 +104,7 @@ export default function DataIncoming() {
       sortable: true,
       wrap: true, // 🔧 OPSIONAL: enable text wrapping untuk kolom ini
       minWidth: "300px", // 🔧 OPSIONAL: atur lebar minimal kolom (bisa px, %, em, dll)
-      
+
     },
     {
       key: "kontak_person", // 🔧 GANTI: field dari API response
@@ -143,36 +143,35 @@ export default function DataIncoming() {
         { value: "diterima", label: "di terima" },
         { value: "ditolak", label: "di tolak" },
       ],
-       render: (item) => {
-         // Null check untuk mencegah error
-         if (!item) {
-           return (
-             <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
-               menunggu
-             </span>
-           );
-         }
-
-          const text = item === "diterima" ? "Diterima" : 
-                      item === "ditolak" ? "Ditolak" : 
-                      item === null ? "Pending" : "Pending";
-
+      render: (item) => {
+        // Null check untuk mencegah error
+        if (!item) {
           return (
-            <span
-              className={`px-3 py-1 rounded-full text-sm font-medium ${
-                item.status_terima === "diterima"
-                  ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-                  : item.status_terima === "ditolak"
-                  ? "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
-                  : item.status_terima === null
-                  ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300"
-                  : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
-              }`}
-            >
-              {text}
+            <span className="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+              menunggu
             </span>
           );
-       },
+        }
+
+        const text = item === "diterima" ? "Diterima" :
+          item === "ditolak" ? "Ditolak" :
+            item === null ? "Pending" : "Pending";
+
+        return (
+          <span
+            className={`px-3 py-1 rounded-full text-sm font-medium ${item.status_terima === "diterima"
+                ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
+                : item.status_terima === "ditolak"
+                  ? "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
+                  : item.status_terima === null
+                    ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300"
+                    : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+              }`}
+          >
+            {text}
+          </span>
+        );
+      },
     },
     {
       key: "status", // 🔧 GANTI: field dari API response
@@ -180,11 +179,11 @@ export default function DataIncoming() {
       searchable: true,
       sortable: true,
       render: (value, item) => {
-        return(
+        return (
           <div>
             <button
-            onClick={() => handleStatus(item)}
-            className="px-3 py-1 cursor-pointer rounded-full text-sm font-medium bg-green-100 text-green-800">
+              onClick={() => handleStatus(item)}
+              className="px-3 py-1 cursor-pointer rounded-full text-sm font-medium bg-green-100 text-green-800">
               {value}
             </button>
           </div>
@@ -196,7 +195,17 @@ export default function DataIncoming() {
       title: "Disposisi", // 🔧 GANTI: judul kolom// 🔧 OPSIONAL: tipe kolom untuk format tanggal
       sortable: true,
       render: (item) => {
-        return(
+        return (
+          <div>{item}</div>
+        )
+      },
+    },
+    {
+      key: "rate", // 🔧 GANTI: field dari API response
+      title: "Rate", // 🔧 GANTI: judul kolom// 🔧 OPSIONAL: tipe kolom untuk format tanggal
+      sortable: true,
+      render: (item) => {
+        return (
           <div>{item}</div>
         )
       },
@@ -247,22 +256,22 @@ export default function DataIncoming() {
           title: "disposisi",
           className: "text-purple-600 hover:text-green-900",
           onClick: (item) => handleDisposisi(item),
-          show: (item) => item.status_terima !== "diterima", 
+          show: (item) => item.status_terima !== "diterima",
         },
-          {
-            icon: Trash2,
-            title: "Hapus",
-            className: "text-red-600 hover:text-red-900",
-            onClick: (item) => handleDelete(item),
-            show: (item) => item.status_terima !== "diterima", // Sembunyikan jika diterima
-          },
-          {
-            icon: FolderArchive,
-            title: "Arsip",
-            className: "text-blue-600 hover:text-blue-900",
-            onClick: (item) => handleArsip(item),
-            show: (item) => item.status_terima === "diterima", // Tampilkan hanya jika diterima
-          },
+        {
+          icon: Trash2,
+          title: "Hapus",
+          className: "text-red-600 hover:text-red-900",
+          onClick: (item) => handleDelete(item),
+          show: (item) => item.status_terima !== "diterima", // Sembunyikan jika diterima
+        },
+        {
+          icon: FolderArchive,
+          title: "Arsip",
+          className: "text-blue-600 hover:text-blue-900",
+          onClick: (item) => handleArsip(item),
+          show: (item) => item.status_terima === "diterima", // Tampilkan hanya jika diterima
+        },
       ],
     },
   ];
@@ -322,7 +331,7 @@ export default function DataIncoming() {
       }
     }
   };
-  const postIncoming = async (form) => {};
+  const postIncoming = async (form) => { };
   const handleDataChange = (params) => {
     setSearchTerm(params.search || "");
     setFilters(params.filters || {});
@@ -395,12 +404,12 @@ export default function DataIncoming() {
   // CRUD handlers
   const handleStatus = async (item) => {
     try {
-     const response = await api.put(`/sisfo/incoming/${item.id}/status-proses`, {
-      status: "diterima"
-     });
-     if (response.data.status === "success") {
-      getIncoming();
-     }
+      const response = await api.put(`/sisfo/incoming/${item.id}/status-proses`, {
+        status: "diterima"
+      });
+      if (response.data.status === "success") {
+        getIncoming();
+      }
     } catch (error) {
       console.error('Error updating status:', error);
     }
@@ -457,7 +466,7 @@ export default function DataIncoming() {
     setDisposisiSurat(null); // 🔧 GANTI: sesuaikan nama variable
     setIsDisposisiMode(false);
   };
-  
+
   const handleDisposisiSuccess = (disposisiData) => {
     console.log("Disposisi saved successfully:", disposisiData);
     // Refresh data after successful disposisi
@@ -466,29 +475,29 @@ export default function DataIncoming() {
     setDisposisiSurat(null);
     setIsDisposisiMode(false);
   };
-  
+
   const handleArsip = async (item) => {
     try {
       console.log("Mengarsipkan surat:", item);
       console.log("ID:", item.id);
       console.log("Status saat ini:", item.status);
-      
+
       // Implementasi API call untuk arsip surat
       const response = await api.put(`/sisfo/incoming/${item.id}/status`, {
         status: 'arsip'
       });
-      
+
       if (response.data.status === "success") {
         console.log("Surat berhasil diarsipkan");
         // Refresh data setelah arsip
         getIncoming();
       }
-      
+
     } catch (error) {
       console.error('Error archiving surat:', error);
     }
   };
-  
+
   const handleAddSuccess = (newIncoming) => {
     console.log("User added successfully:", newIncoming); // 🔧 GANTI: sesuaikan pesan log
     // Refresh data after successful add
@@ -502,7 +511,7 @@ export default function DataIncoming() {
   const handleExport = () => {
     setShowExportModal(true);
   };
-  
+
 
   return (
     <>
@@ -552,12 +561,12 @@ export default function DataIncoming() {
         backdropBlur="none"
         closeOnOverlayClick={true}
       >
-         <Disposisi 
-           disposisiSurat={disposisiSurat} 
-           isDisposisiMode={isDisposisiMode}
-           onClose={handleCloseAddModal}
-           onSuccess={handleDisposisiSuccess}
-         />
+        <Disposisi
+          disposisiSurat={disposisiSurat}
+          isDisposisiMode={isDisposisiMode}
+          onClose={handleCloseAddModal}
+          onSuccess={handleDisposisiSuccess}
+        />
       </Modal>
 
       {/* Delete Confirmation Modal */}

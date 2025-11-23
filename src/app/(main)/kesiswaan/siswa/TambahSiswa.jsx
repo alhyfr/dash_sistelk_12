@@ -6,6 +6,8 @@ import Select from '@/components/Select'
 import ApiSelect from '@/components/ApiSelect'
 import api from '@/utils/api'
 import { useData } from '@/context/DataContext'
+import { siswaConstraint } from '@/utils/constraints'
+import validate from 'validate.js'
 export default function TambahSiswa({
     onClose,
     onSuccess,
@@ -61,16 +63,9 @@ export default function TambahSiswa({
         }
     }
     const validateForm = () => {
-        const newErrors = {}
-
-        if (!formData.nis.trim()) newErrors.nis = 'NIS harus diisi'
-        if (!formData.nama.trim()) newErrors.nama = 'Nama harus diisi'
-        if (!formData.prodi_id) newErrors.prodi_id = 'Prodi harus dipilih'
-        if (!formData.angkatan.trim()) newErrors.angkatan = 'Angkatan harus diisi'
-        if (!formData.status) newErrors.status = 'Status harus dipilih'
-
-        setErrors(newErrors)
-        return Object.keys(newErrors).length === 0
+        const newErrors = validate(formData, siswaConstraint)
+        setErrors(newErrors || {})
+        return !newErrors
     }
     const handleSubmit = async (e) => {
         e.preventDefault()

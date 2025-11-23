@@ -129,6 +129,20 @@ export const keteranganConstraints = {
     presence: { allowEmpty: false, message: "^Tanggal wajib diisi" },
   }
 }
+export const siswaConstraint = {
+  nis: {
+    presence: { allowEmpty: false, message: "^NIS wajib diisi" },
+  },
+  nama: {
+    presence: { allowEmpty: false, message: "^Nama wajib diisi" },
+  },
+  prodi_id: {
+    presence: { allowEmpty: false, message: "^Prodi wajib diisi" },
+  },
+  angkatan: {
+    presence: { allowEmpty: false, message: "^Angkatan wajib diisi" },
+  }
+}
 
-const constraints = { ...skConstraints, ...keteranganConstraints }
+const constraints = { ...skConstraints, ...keteranganConstraints, ...siswaConstraint }
 export default constraints

@@ -1,13 +1,13 @@
 'use client'
 import { useState, useMemo, useEffect } from 'react'
-import { 
-  Search, 
-  Filter, 
-  Download, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Eye, 
+import {
+  Search,
+  Filter,
+  Download,
+  Plus,
+  Edit,
+  Trash2,
+  Eye,
   ChevronLeft,
   ChevronRight,
   ArrowUpDown,
@@ -15,7 +15,7 @@ import {
   ArrowDown
 } from 'lucide-react'
 
-export default function DataTable({ 
+export default function DataTable({
   data = [],
   columns = [],
   onAdd = null,
@@ -81,16 +81,16 @@ export default function DataTable({
       filtered.sort((a, b) => {
         const aVal = a[sortField]
         const bVal = b[sortField]
-        
+
         if (aVal === null || aVal === undefined) return 1
         if (bVal === null || bVal === undefined) return -1
-        
+
         if (typeof aVal === 'string') {
-          return sortDirection === 'asc' 
+          return sortDirection === 'asc'
             ? aVal.localeCompare(bVal)
             : bVal.localeCompare(aVal)
         }
-        
+
         if (sortDirection === 'asc') {
           return aVal > bVal ? 1 : -1
         } else {
@@ -111,11 +111,11 @@ export default function DataTable({
   // Handlers
   const handleSort = (field) => {
     if (!sortable) return
-    
+
     const newDirection = sortField === field ? (sortDirection === 'asc' ? 'desc' : 'asc') : 'asc'
     setSortField(field)
     setSortDirection(newDirection)
-    
+
     // No server-side call needed for sorting - it's client-side only
     // Sorting is handled by the filteredData useMemo
   }
@@ -123,21 +123,21 @@ export default function DataTable({
   const handleSearch = (value) => {
     setSearchTerm(value)
     setCurrentPage(1) // Reset to first page on search
-    
+
     // Show typing state immediately
     if (value.trim() !== '') {
       setIsTyping(true)
     } else {
       setIsTyping(false)
     }
-    
+
     // Trigger server-side data change
     if (serverSide && onDataChange) {
       // Clear existing timeout
       if (window.searchTimeout) {
         clearTimeout(window.searchTimeout)
       }
-      
+
       // If search is empty, trigger immediately (no debounce)
       if (value === '' || value.trim() === '') {
         setIsTyping(false)
@@ -166,7 +166,7 @@ export default function DataTable({
     const newFilters = { ...filters, [key]: value }
     setFilters(newFilters)
     setCurrentPage(1) // Reset to first page on filter
-    
+
     // Trigger server-side data change with filters
     if (serverSide && onDataChange) {
       onDataChange({
@@ -181,7 +181,7 @@ export default function DataTable({
 
   const handlePageChange = (page) => {
     setCurrentPage(page)
-    
+
     // Trigger server-side data change (no sort parameters)
     if (serverSide && onDataChange) {
       onDataChange({
@@ -197,7 +197,7 @@ export default function DataTable({
   const handleItemsPerPageChange = (newItemsPerPage) => {
     setItemsPerPage(newItemsPerPage)
     setCurrentPage(1) // Reset to first page
-    
+
     // Trigger server-side data change (no sort parameters)
     if (serverSide && onDataChange) {
       onDataChange({
@@ -212,7 +212,7 @@ export default function DataTable({
 
   const handleSelectAll = (checked) => {
     if (!selectable) return
-    
+
     if (checked) {
       setSelectedItems(currentData.map(item => item.id))
     } else {
@@ -222,7 +222,7 @@ export default function DataTable({
 
   const handleSelectItem = (id, checked) => {
     if (!selectable) return
-    
+
     if (checked) {
       setSelectedItems([...selectedItems, id])
     } else {
@@ -239,11 +239,11 @@ export default function DataTable({
 
   const getSortIcon = (field) => {
     if (!sortable) return null
-    
+
     if (sortField !== field) {
       return <ArrowUpDown className="w-4 h-4 text-gray-400 dark:text-gray-500" />
     }
-    return sortDirection === 'asc' 
+    return sortDirection === 'asc'
       ? <ArrowUp className="w-4 h-4 text-red-600 dark:text-red-400" />
       : <ArrowDown className="w-4 h-4 text-red-600 dark:text-red-400" />
   }
@@ -252,7 +252,7 @@ export default function DataTable({
     if (column.render) {
       return column.render(item[column.key], item)
     }
-    
+
     if (column.type === 'badge') {
       const status = item[column.key]
       const baseClasses = "px-2 py-1 rounded-full text-xs font-medium"
@@ -263,25 +263,25 @@ export default function DataTable({
         </span>
       )
     }
-    
+
     if (column.type === 'date') {
       return new Date(item[column.key]).toLocaleDateString()
     }
-    
+
     if (column.type === 'actions') {
       return (
         <div className="flex items-center justify-end gap-2">
           {column.actions?.map((action, index) => {
             // Check if action should be shown
             const shouldShow = typeof action.show === 'function' ? action.show(item) : (action.show !== false)
-            
+
             if (!shouldShow) return null
-            
+
             // Handle dynamic icon, title, and className
             const Icon = typeof action.icon === 'function' ? action.icon(item) : action.icon
             const title = typeof action.title === 'function' ? action.title(item) : action.title
             const className = typeof action.className === 'function' ? action.className(item) : action.className
-            
+
             return (
               <button
                 key={index}
@@ -296,7 +296,7 @@ export default function DataTable({
         </div>
       )
     }
-    
+
     return item[column.key]
   }
 
@@ -310,7 +310,7 @@ export default function DataTable({
         </div>
         <div className="flex items-center gap-2">
           {onExport && (
-            <button 
+            <button
               onClick={onExport}
               className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center gap-2"
             >
@@ -319,7 +319,7 @@ export default function DataTable({
             </button>
           )}
           {onAdd && !hideAddButton && (
-            <button 
+            <button
               onClick={onAdd}
               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2"
             >
@@ -452,11 +452,10 @@ export default function DataTable({
                   </th>
                 )}
                 {columns.map((column) => (
-                  <th 
+                  <th
                     key={column.key}
-                    className={`px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider ${
-                      sortable && column.sortable !== false ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600' : ''
-                    } ${column.type === 'actions' ? 'text-right' : ''}`}
+                    className={`px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider ${sortable && column.sortable !== false ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600' : ''
+                      } ${column.type === 'actions' ? 'text-right' : ''}`}
                     onClick={() => sortable && column.sortable !== false && column.type !== 'actions' && handleSort(column.key)}
                   >
                     <div className="flex items-center gap-1">
@@ -469,8 +468,8 @@ export default function DataTable({
             </thead>
             <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-gray-700">
               {currentData.map((item, index) => (
-                <tr 
-                  key={item.id} 
+                <tr
+                  key={item.id}
                   className="hover:bg-gray-50 dark:hover:bg-slate-700"
                 >
                   {selectable && (
@@ -484,8 +483,8 @@ export default function DataTable({
                     </td>
                   )}
                   {columns.map((column) => (
-                    <td 
-                      key={column.key} 
+                    <td
+                      key={column.key}
                       className={`px-6 py-4 text-gray-900 dark:text-gray-100 ${column.wrap ? 'whitespace-normal break-words' : 'whitespace-nowrap'} ${column.type === 'actions' ? 'text-right' : ''}`}
                       style={{
                         ...(column.minWidth && { minWidth: column.minWidth }),
@@ -503,34 +502,16 @@ export default function DataTable({
 
         {/* Pagination */}
         {pagination && (
-          <div className="bg-white dark:bg-slate-800 px-4 py-3 flex items-center justify-between border-t border-gray-200 dark:border-gray-700 sm:px-6">
-            <div className="flex-1 flex justify-between sm:hidden">
-                  <button
-                    onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                    disabled={currentPage === 1}
-                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Previous
-                  </button>
-                  <button
-                    onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                    disabled={currentPage === totalPages}
-                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Next
-                  </button>
-            </div>
-            <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-              <div>
+          <div className="bg-white dark:bg-slate-800 px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+            {/* Mobile Pagination */}
+            <div className="flex flex-col gap-3 sm:hidden">
+              <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                  Menampilkan <span className="font-medium">{startIndex + 1}</span> sampai{' '}
-                  <span className="font-medium">{Math.min(endIndex, filteredData.length)}</span> dari{' '}
-                  <span className="font-medium">{filteredData.length}</span> hasil
+                  Halaman <span className="font-medium">{currentPage}</span> dari{' '}
+                  <span className="font-medium">{totalPages}</span>
                 </p>
-              </div>
-              <div className="flex items-center gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-700 dark:text-gray-300">Items per page:</span>
+                  <span className="text-xs text-gray-600 dark:text-gray-400">Per halaman:</span>
                   <select
                     value={itemsPerPage}
                     onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
@@ -541,31 +522,129 @@ export default function DataTable({
                     ))}
                   </select>
                 </div>
-                <div className="flex items-center gap-1">
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <button
+                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className="flex-1 inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ChevronLeft className="w-4 h-4 mr-1" />
+                  Previous
+                </button>
+                <button
+                  onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                  disabled={currentPage === totalPages}
+                  className="flex-1 inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4 ml-1" />
+                </button>
+              </div>
+            </div>
+
+            {/* Desktop Pagination */}
+            <div className="hidden sm:flex sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm text-gray-700 dark:text-gray-300">
+                  Menampilkan <span className="font-medium">{startIndex + 1}</span> sampai{' '}
+                  <span className="font-medium">{Math.min(endIndex, filteredData.length)}</span> dari{' '}
+                  <span className="font-medium">{filteredData.length}</span> hasil
+                </p>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">Items per page:</span>
+                  <select
+                    value={itemsPerPage}
+                    onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
+                    className="px-2 py-1 border border-gray-300 dark:border-gray-400 rounded text-sm bg-white dark:bg-white text-gray-900 dark:text-gray-900"
+                  >
+                    {itemsPerPageOptions.map(option => (
+                      <option key={option} value={option}>{option}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex items-center gap-1 overflow-x-auto max-w-md">
                   <button
                     onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`px-3 py-2 text-sm border rounded ${
-                        page === currentPage
-                          ? 'bg-red-600 text-white border-red-600'
-                          : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-slate-600'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ))}
+
+                  {/* Smart pagination with ellipsis */}
+                  {(() => {
+                    const pages = [];
+                    const maxVisiblePages = 5;
+
+                    if (totalPages <= maxVisiblePages + 2) {
+                      // Show all pages if total is small
+                      for (let i = 1; i <= totalPages; i++) {
+                        pages.push(i);
+                      }
+                    } else {
+                      // Always show first page
+                      pages.push(1);
+
+                      if (currentPage <= 3) {
+                        // Near start
+                        for (let i = 2; i <= Math.min(maxVisiblePages, totalPages - 1); i++) {
+                          pages.push(i);
+                        }
+                        pages.push('ellipsis-end');
+                      } else if (currentPage >= totalPages - 2) {
+                        // Near end
+                        pages.push('ellipsis-start');
+                        for (let i = Math.max(2, totalPages - maxVisiblePages + 1); i < totalPages; i++) {
+                          pages.push(i);
+                        }
+                      } else {
+                        // Middle
+                        pages.push('ellipsis-start');
+                        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+                          pages.push(i);
+                        }
+                        pages.push('ellipsis-end');
+                      }
+
+                      // Always show last page
+                      pages.push(totalPages);
+                    }
+
+                    return pages.map((page, index) => {
+                      if (typeof page === 'string') {
+                        // Ellipsis
+                        return (
+                          <span
+                            key={page}
+                            className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400"
+                          >
+                            ...
+                          </span>
+                        );
+                      }
+
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => handlePageChange(page)}
+                          className={`px-3 py-2 text-sm border rounded flex-shrink-0 ${page === currentPage
+                              ? 'bg-red-600 text-white border-red-600'
+                              : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-slate-600'
+                            }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    });
+                  })()}
+
                   <button
                     onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
-                    className="p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="p-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>
