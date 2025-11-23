@@ -2,7 +2,7 @@
 import validate from 'validate.js'
 
 // ✅ Custom validator untuk file type
-validate.validators.fileType = function(value, options) {
+validate.validators.fileType = function (value, options) {
   if (!value) {
     // Jika tidak ada file dan field optional, return null (valid)
     return null
@@ -23,7 +23,7 @@ validate.validators.fileType = function(value, options) {
 }
 
 // ✅ Custom validator untuk file size (opsional, untuk batasi ukuran)
-validate.validators.fileSize = function(value, options) {
+validate.validators.fileSize = function (value, options) {
   if (!value || !(value instanceof File)) {
     return null
   }
@@ -36,7 +36,7 @@ validate.validators.fileSize = function(value, options) {
   return null
 }
 
-const constraints = {
+export const skConstraints = {
   tgl: {
     presence: { allowEmpty: false, message: "^Tanggal wajib diisi" },
   },
@@ -100,4 +100,35 @@ const constraints = {
   },
 }
 
+export const keteranganConstraints = {
+  siswa_id: {
+    presence: { allowEmpty: false, message: "^Siswa harus dipilih" },
+  },
+  tmp_lahir: {
+    presence: { allowEmpty: false, message: "^Tempat Lahir wajib diisi" },
+  },
+  tgl_lahir: {
+    presence: { allowEmpty: false, message: "^Tanggal Lahir wajib diisi" },
+  },
+  nisn: {
+    presence: { allowEmpty: false, message: "^NISN wajib diisi" },
+  },
+  jk: {
+    presence: { allowEmpty: false, message: "^Jenis Kelamin wajib diisi" },
+  },
+  agama: {
+    presence: { allowEmpty: false, message: "^Agama wajib diisi" },
+  },
+  kelas: {
+    presence: { allowEmpty: false, message: "^Kelas wajib diisi" },
+  },
+  npsn: {
+    presence: { allowEmpty: false, message: "^NPSN wajib diisi" },
+  },
+  tgl: {
+    presence: { allowEmpty: false, message: "^Tanggal wajib diisi" },
+  }
+}
+
+const constraints = { ...skConstraints, ...keteranganConstraints }
 export default constraints

@@ -3,20 +3,20 @@
 import { useState, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { 
-  Menu, 
-  X, 
-  User, 
-  LogOut, 
+import {
+  Menu,
+  X,
+  User,
+  LogOut,
   Bell,
   Search,
   ChevronDown,
   ChevronLeft,
   ChevronRight
 } from "lucide-react";
-import { 
-  mainNavigation, 
-  dropdownNavigation, 
+import {
+  mainNavigation,
+  dropdownNavigation,
   settingsNavigation,
   transitionClasses,
   getStaggerDelay
@@ -27,7 +27,7 @@ export default function MainLayout({ children }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState({});
-  
+
   const { user, logout, canAccess } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -35,7 +35,7 @@ export default function MainLayout({ children }) {
   // ✅ Filter dropdown navigation berdasarkan role user
   const filteredDropdownNavigation = useMemo(() => {
     if (!user) return [];
-    
+
     return dropdownNavigation.filter(section => {
       if (!section.roles || section.roles.length === 0) return true;
       return canAccess(section.roles);
@@ -45,7 +45,7 @@ export default function MainLayout({ children }) {
   // ✅ Filter main navigation berdasarkan role user
   const filteredMainNavigation = useMemo(() => {
     if (!user) return mainNavigation;
-    
+
     return mainNavigation.filter(item => {
       if (!item.roles || item.roles.length === 0) return true;
       return canAccess(item.roles);
@@ -82,16 +82,15 @@ export default function MainLayout({ children }) {
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-40 bg-gray-600 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-90 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 bg-white dark:bg-slate-800 shadow-lg transform transition-all duration-300 ease-in-out lg:translate-x-0 ${
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      } ${sidebarCollapsed ? 'w-16' : 'w-64'}`}>
+      <div className={`fixed inset-y-0 left-0 z-50 bg-white dark:bg-slate-800 shadow-lg transform transition-all duration-300 ease-in-out lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } ${sidebarCollapsed ? 'w-16' : 'w-64'}`}>
         <div className="flex items-center justify-between h-16 px-6 bg-gradient-to-r from-red-700 to-red-600">
           {!sidebarCollapsed && <h1 className="text-xl font-bold text-white">SISTELK12</h1>}
           <div className="flex items-center space-x-2">
@@ -120,22 +119,18 @@ export default function MainLayout({ children }) {
                 <a
                   key={item.name}
                   href={item.href}
-                  className={`group flex items-center px-3 py-2 text-sm font-medium rounded-lg ${transitionClasses.menuItem} ${
-                    sidebarCollapsed ? 'justify-center' : ''
-                  } ${
-                    isActive
+                  className={`group flex items-center px-3 py-2 text-sm font-medium rounded-lg ${transitionClasses.menuItem} ${sidebarCollapsed ? 'justify-center' : ''
+                    } ${isActive
                       ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-r-2 border-red-600 dark:border-red-500'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-300'
-                  }`}
+                    }`}
                   title={sidebarCollapsed ? item.name : ''}
                 >
-                  <Icon className={`h-5 w-5 ${transitionClasses.menuItem} ${
-                    sidebarCollapsed ? '' : 'mr-3'
-                  } ${
-                    isActive
+                  <Icon className={`h-5 w-5 ${transitionClasses.menuItem} ${sidebarCollapsed ? '' : 'mr-3'
+                    } ${isActive
                       ? 'text-red-600 dark:text-red-400'
                       : 'text-gray-400 dark:text-gray-500 group-hover:text-red-500 dark:group-hover:text-red-400'
-                  }`} />
+                    }`} />
                   {!sidebarCollapsed && item.name}
                 </a>
               );
@@ -151,35 +146,30 @@ export default function MainLayout({ children }) {
                 <div key={section.name} className="space-y-1">
                   <button
                     onClick={() => toggleDropdown(section.name)}
-                    className={`group w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-between'} px-3 py-2 text-sm font-medium rounded-lg ${transitionClasses.menuItem} ${
-                      hasActive
+                    className={`group w-full flex items-center ${sidebarCollapsed ? 'justify-center' : 'justify-between'} px-3 py-2 text-sm font-medium rounded-lg ${transitionClasses.menuItem} ${hasActive
                         ? 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
                         : 'text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-300'
-                    }`}
+                      }`}
                     title={sidebarCollapsed ? section.name : ''}
                   >
                     <div className="flex items-center">
-                      <Icon className={`${sidebarCollapsed ? '' : 'mr-3'} h-5 w-5 ${transitionClasses.menuItem} ${
-                        hasActive
+                      <Icon className={`${sidebarCollapsed ? '' : 'mr-3'} h-5 w-5 ${transitionClasses.menuItem} ${hasActive
                           ? 'text-red-600 dark:text-red-400'
                           : 'text-gray-400 dark:text-gray-500 group-hover:text-red-500 dark:group-hover:text-red-400'
-                      }`} />
+                        }`} />
                       {!sidebarCollapsed && section.name}
                     </div>
                     {!sidebarCollapsed && (
-                      <ChevronRight className={`h-4 w-4 text-gray-400 dark:text-gray-500 ${transitionClasses.chevronIcon} ${
-                        isOpen ? 'rotate-90' : ''
-                      }`} />
+                      <ChevronRight className={`h-4 w-4 text-gray-400 dark:text-gray-500 ${transitionClasses.chevronIcon} ${isOpen ? 'rotate-90' : ''
+                        }`} />
                     )}
                   </button>
 
                   {!sidebarCollapsed && (
-                    <div className={`${transitionClasses.dropdownContainer} ${
-                      isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                    }`}>
-                      <div className={`ml-6 space-y-1 ${transitionClasses.dropdownContent} ${
-                        isOpen ? 'translate-y-0' : '-translate-y-2'
+                    <div className={`${transitionClasses.dropdownContainer} ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                       }`}>
+                      <div className={`ml-6 space-y-1 ${transitionClasses.dropdownContent} ${isOpen ? 'translate-y-0' : '-translate-y-2'
+                        }`}>
                         {section.children.map((child, index) => {
                           const ChildIcon = child.icon;
                           const isChildActive = isActiveLink(child.href);
@@ -187,20 +177,18 @@ export default function MainLayout({ children }) {
                             <a
                               key={child.name}
                               href={child.href}
-                              className={`group flex items-center px-3 py-2 text-sm rounded-lg ${transitionClasses.menuItem} ${transitionClasses.staggerChild} ${getStaggerDelay(index)} ${
-                                isChildActive
+                              className={`group flex items-center px-3 py-2 text-sm rounded-lg ${transitionClasses.menuItem} ${transitionClasses.staggerChild} ${getStaggerDelay(index)} ${isChildActive
                                   ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-r-2 border-red-600 dark:border-red-500'
                                   : 'text-gray-600 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 dark:hover:text-red-300'
-                              }`}
+                                }`}
                               style={{
                                 animationDelay: isOpen ? `${index * 50}ms` : '0ms'
                               }}
                             >
-                              <ChildIcon className={`mr-3 h-4 w-4 ${transitionClasses.menuItem} ${
-                                isChildActive
+                              <ChildIcon className={`mr-3 h-4 w-4 ${transitionClasses.menuItem} ${isChildActive
                                   ? 'text-red-600 dark:text-red-400'
                                   : 'text-gray-400 dark:text-gray-500 group-hover:text-red-500 dark:group-hover:text-red-400'
-                              }`} />
+                                }`} />
                               {child.name}
                             </a>
                           );
@@ -237,9 +225,8 @@ export default function MainLayout({ children }) {
       </div>
 
       {/* Main content */}
-      <div className={`transition-all duration-300 ease-in-out ${
-        sidebarCollapsed ? 'lg:pl-16' : 'lg:pl-64'
-      }`}>
+      <div className={`transition-all duration-300 ease-in-out ${sidebarCollapsed ? 'lg:pl-16' : 'lg:pl-64'
+        }`}>
         {/* Header */}
         <header className="bg-white dark:bg-slate-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
           <div className="px-4 sm:px-6 lg:px-8">
@@ -304,7 +291,7 @@ export default function MainLayout({ children }) {
                           Role: {user?.role || 'user'}
                         </p>
                       </div>
-                      
+
                       {/* Settings Navigation */}
                       {settingsNavigation.map((item) => {
                         const Icon = item.icon;
@@ -319,9 +306,9 @@ export default function MainLayout({ children }) {
                           </a>
                         );
                       })}
-                      
+
                       <div className="border-t border-gray-100 dark:border-gray-700 my-1"></div>
-                      
+
                       {/* Logout button */}
                       <button
                         onClick={handleLogout}
@@ -339,7 +326,7 @@ export default function MainLayout({ children }) {
         </header>
 
         {/* Main content area */}
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 h-screen">
           {children}
         </main>
 

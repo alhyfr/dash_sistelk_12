@@ -6,7 +6,7 @@
 // - absolute URL (e.g., "http://localhost:3005/api/storage/file_123.pdf")
 // - object with fields: file_url | file | kode | id
 export function toPdfUrl(input, base = 'https://rest1.sistelk.id') {
-// export function toPdfUrl(input, base = 'http://localhost:3005') {
+  // export function toPdfUrl(input, base = 'http://localhost:3005') {
   if (!input) return ''
 
   const build = (value) => {
@@ -34,32 +34,32 @@ export function toPdfUrl(input, base = 'https://rest1.sistelk.id') {
 // ✅ Deteksi tipe file dari URL/filename
 export function getFileType(url) {
   if (!url) return 'unknown'
-  
+
   const urlLower = url.toLowerCase()
   if (urlLower.endsWith('.pdf')) return 'pdf'
   if (urlLower.endsWith('.doc')) return 'doc'
   if (urlLower.endsWith('.docx')) return 'docx'
-  
+
   return 'unknown'
 }
 
 // ✅ Dapatkan viewer URL berdasarkan tipe file
 export function getViewerUrl(fileUrl) {
   if (!fileUrl) return ''
-  
+
   const fileType = getFileType(fileUrl)
-  
+
   // PDF: langsung gunakan URL dari server backend
   if (fileType === 'pdf') {
     return fileUrl
   }
-  
+
   // DOC/DOCX: gunakan Microsoft Office Online Viewer untuk menampilkan dari server backend
   if (fileType === 'doc' || fileType === 'docx') {
     const encodedUrl = encodeURIComponent(fileUrl)
     return `https://view.officeapps.live.com/op/embed.aspx?src=${encodedUrl}`
   }
-  
+
   return fileUrl
 }
 

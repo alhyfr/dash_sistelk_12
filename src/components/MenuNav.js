@@ -10,6 +10,7 @@ import {
   Shield,
   HelpCircle,
   Mail,
+  Briefcase,
   User2,
   ChevronRight
 } from "lucide-react";
@@ -95,17 +96,18 @@ export const dropdownNavigation = [
     children: [
       { name: "Surat Keputusan", href: "/persuratan/sk", icon: Mail },
       { name: "Surat Masuk", href: "/persuratan/incoming", icon: Mail },
-      { name: "Surat Tugas", href: "/classes", icon: Calendar },
-      { name: "Surat Rekomendasi", href: "/subjects", icon: FileText },
+      { name: "Surat Tugas", href: "/persuratan/tugas", icon: Calendar },
+      { name: "Surat Rekomendasi", href: "/persuratan/rekomendasi", icon: FileText },
+      { name: "Keterangan", href: "/persuratan/keterangan", icon: FileText },
     ]
   },
   {
     name: "Human Capital",
-    icon: BarChart3,
+    icon: Briefcase,
     roles: ["admin", "superadmin", "hc","HC"], // ✅ Roles yang bisa akses
     children: [
       { name: "SOTK", href: "/hc/sotk", icon: Users },
-      { name: "Kepegawaian", href: "/hc/kepegawaian", icon: BarChart3 },
+      { name: "Kepegawaian", href: "/hc/gupeg", icon: Briefcase },
       { name: "Financial Reports", href: "/reports/financial", icon: BarChart3 },
     ]
   },
@@ -127,6 +129,14 @@ export const dropdownNavigation = [
       { name: "Help Center", href: "/help", icon: HelpCircle },
       { name: "Documentation", href: "/docs", icon: FileText },
       { name: "Contact Support", href: "/support", icon: User },
+    ]
+  },
+  {
+    name: "Kesiswaan",
+    icon: FileText,
+    roles: [], // ✅ Empty = semua user bisa akses
+    children: [
+      { name: "Data Siswa", href: "/kesiswaan/siswa", icon: Users },
     ]
   }
 ];

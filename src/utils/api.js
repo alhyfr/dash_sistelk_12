@@ -35,7 +35,7 @@ api.interceptors.response.use(
         if (error.response?.status === 401) {
             const currentPath = window.location.pathname;
             const publicRoutes = ["/login", "/esurat", "/forgot-password", "/reset-password", "/documail"];
-            
+
             // Check if current path is a public route
             const isPublicRoute = publicRoutes.some(route => currentPath === route || currentPath.startsWith(route + "/"));
 
@@ -46,7 +46,7 @@ api.interceptors.response.use(
                 document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
                 return Promise.reject(error);
             }
-            
+
             localStorage.removeItem("token");
             localStorage.removeItem("user");
             // Clear cookies

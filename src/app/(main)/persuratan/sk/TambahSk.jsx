@@ -7,7 +7,7 @@ import Textarea from '@/components/Textarea'
 import DatePicker from '@/components/DatePicker'
 import FileUpload from '@/components/FileUpload'
 import Button from '@/components/Button'
-import constraints from '@/utils/constraints'
+import { skConstraints } from '@/utils/constraints'
 import validate from 'validate.js'
 import { useData } from '@/context/DataContext'
 import dayjs from 'dayjs'
@@ -17,14 +17,14 @@ import StarterKit from '@tiptap/starter-kit'
 // ========================================
 // TipTap Editor Component with Dark Mode
 // ========================================
-const TipTapEditor = ({ 
+const TipTapEditor = ({
   name,
-  label, 
-  value, 
-  onChange, 
+  label,
+  value,
+  onChange,
   error,
   placeholder = 'Ketik di sini...',
-  required = false 
+  required = false
 }) => {
   const editor = useEditor({
     immediatelyRender: false, // Fix SSR for Next.js
@@ -71,17 +71,16 @@ const TipTapEditor = ({
           {required && <span className="text-red-500 dark:text-red-400 ml-1">*</span>}
         </label>
       )}
-      
+
       {/* Toolbar */}
       <div className={`border ${error ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'} rounded-t-lg bg-gray-50 dark:bg-gray-800 px-3 py-2 flex flex-wrap gap-1`}>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`px-3 py-1.5 text-sm rounded transition-colors ${
-            editor.isActive('bulletList') 
-              ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-semibold' 
-              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-          }`}
+          className={`px-3 py-1.5 text-sm rounded transition-colors ${editor.isActive('bulletList')
+            ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-semibold'
+            : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+            }`}
           title="Bullet List"
         >
           • List
@@ -89,11 +88,10 @@ const TipTapEditor = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`px-3 py-1.5 text-sm rounded transition-colors ${
-            editor.isActive('orderedList') 
-              ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-semibold' 
-              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-          }`}
+          className={`px-3 py-1.5 text-sm rounded transition-colors ${editor.isActive('orderedList')
+            ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-semibold'
+            : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+            }`}
           title="Numbered List"
         >
           1. List
@@ -102,11 +100,10 @@ const TipTapEditor = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`px-3 py-1.5 text-sm font-bold rounded transition-colors ${
-            editor.isActive('bold') 
-              ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300' 
-              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-          }`}
+          className={`px-3 py-1.5 text-sm font-bold rounded transition-colors ${editor.isActive('bold')
+            ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+            : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+            }`}
           title="Bold"
         >
           B
@@ -114,11 +111,10 @@ const TipTapEditor = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`px-3 py-1.5 text-sm italic rounded transition-colors ${
-            editor.isActive('italic') 
-              ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300' 
-              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-          }`}
+          className={`px-3 py-1.5 text-sm italic rounded transition-colors ${editor.isActive('italic')
+            ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+            : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+            }`}
           title="Italic"
         >
           I
@@ -126,11 +122,10 @@ const TipTapEditor = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().setParagraph().run()}
-          className={`px-3 py-1.5 text-sm rounded transition-colors ${
-            editor.isActive('paragraph') 
-              ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300' 
-              : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-          }`}
+          className={`px-3 py-1.5 text-sm rounded transition-colors ${editor.isActive('paragraph')
+            ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+            : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+            }`}
           title="Normal Text"
         >
           P
@@ -138,7 +133,7 @@ const TipTapEditor = ({
       </div>
 
       {/* Editor Content */}
-      <div 
+      <div
         className={`border-x border-b ${error ? 'border-red-500 dark:border-red-400' : 'border-gray-300 dark:border-gray-600'} rounded-b-lg bg-white dark:bg-gray-900 overflow-hidden`}
       >
         <EditorContent editor={editor} className="tiptap-editor" />
@@ -198,12 +193,12 @@ const TipTapEditor = ({
 // ========================================
 // Main TambahSk Component
 // ========================================
-export default function TambahSk({ 
-  onClose = null, 
-  onSuccess = null, 
-  postSk, 
-  editingSk = null, 
-  isEditMode = false 
+export default function TambahSk({
+  onClose = null,
+  onSuccess = null,
+  postSk,
+  editingSk = null,
+  isEditMode = false
 }) {
   const { units } = useData()
   const [formData, setFormData] = useState({
@@ -381,10 +376,10 @@ export default function TambahSk({
       htmlErrors.menetapkan = 'Menetapkan wajib diisi'
     }
 
-    const validation = validate(dataToValidate, constraints)
-    
+    const validation = validate(dataToValidate, skConstraints)
+
     let allErrors = { ...htmlErrors }
-    
+
     if (validation) {
       Object.keys(validation).forEach(key => {
         if (!['menimbang', 'mengingat', 'memperhatikan', 'menetapkan'].includes(key)) {
@@ -428,7 +423,7 @@ export default function TambahSk({
       const ensureString = (value) => value == null ? "" : String(value)
 
       const hasNewFile = formData.lampiran && formData.lampiran instanceof File
-      
+
       if (hasNewFile) {
         submitData = new FormData()
         submitData.append('tgl', ensureString(formData.tgl))
@@ -461,27 +456,27 @@ export default function TambahSk({
           tembusan: ensureString(formData.tembusan),
           unit: ensureString(formData.unit),
         }
-        
+
         if (isEditMode && formData.existingLampiran && !hasNewFile) {
           submitData.lampiran = formData.existingLampiran
         }
       }
 
       if (postSk) await postSk(submitData)
-      
+
       if (onSuccess) onSuccess(submitData)
-      
+
       if (onClose) onClose()
 
     } catch (error) {
       console.error('Error saving SK:', error)
-      
+
       if (error.response?.data?.errors) {
         setErrors(error.response.data.errors)
       } else {
-        const errorMessage = error.response?.data?.message || 
-                           error.message || 
-                           'Terjadi kesalahan saat menyimpan data'
+        const errorMessage = error.response?.data?.message ||
+          error.message ||
+          'Terjadi kesalahan saat menyimpan data'
         setErrors({ general: errorMessage })
       }
     } finally {
