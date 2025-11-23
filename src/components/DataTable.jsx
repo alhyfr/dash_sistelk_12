@@ -102,11 +102,14 @@ export default function DataTable({
     return filtered
   }, [data, searchTerm, sortField, sortDirection, searchableColumns, sortable])
 
-  // Pagination handling
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage)
+  // Pagination handling - use server total in server-side mode
+  const totalItems = serverSide ? total : filteredData.length
+  const totalPages = Math.ceil(totalItems / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
-  const endIndex = Math.min(currentPage * itemsPerPage, filteredData.length)
-  const currentData = filteredData.slice(startIndex, endIndex)
+  const endIndex = Math.min(currentPage * itemsPerPage, totalItems)
+  // In server-side mode, use data as-is (already paginated by server)
+  // In client-side mode, slice the filtered data
+  const currentData = serverSide ? data : filteredData.slice(startIndex, endIndex)
 
   // Handlers
   const handleSort = (field) => {
@@ -548,8 +551,8 @@ export default function DataTable({
               <div>
                 <p className="text-sm text-gray-700 dark:text-gray-300">
                   Menampilkan <span className="font-medium">{startIndex + 1}</span> sampai{' '}
-                  <span className="font-medium">{Math.min(endIndex, filteredData.length)}</span> dari{' '}
-                  <span className="font-medium">{filteredData.length}</span> hasil
+                  <span className="font-medium">{Math.min(endIndex, totalItems)}</span> dari{' '}
+                  <span className="font-medium">{totalItems}</span> hasil
                 </p>
               </div>
               <div className="flex items-center gap-2 flex-wrap">
@@ -631,8 +634,8 @@ export default function DataTable({
                           key={page}
                           onClick={() => handlePageChange(page)}
                           className={`px-3 py-2 text-sm border rounded flex-shrink-0 ${page === currentPage
-                              ? 'bg-red-600 text-white border-red-600'
-                              : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-slate-600'
+                            ? 'bg-red-600 text-white border-red-600'
+                            : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-slate-600'
                             }`}
                         >
                           {page}

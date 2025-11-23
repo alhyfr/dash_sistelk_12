@@ -95,6 +95,8 @@ export default function DataIncoming() {
       title: "Asal Instansi", // 🔧 GANTI: judul kolom
       searchable: true,
       sortable: true,
+      wrap: true, // 🔧 OPSIONAL: enable text wrapping untuk kolom ini
+      minWidth: "300px", // 🔧 OPSIONAL: atur lebar minimal kolom (bisa px, %, em, dll)
 
     },
     {
@@ -160,12 +162,12 @@ export default function DataIncoming() {
         return (
           <span
             className={`px-3 py-1 rounded-full text-sm font-medium ${item.status_terima === "diterima"
-                ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
-                : item.status_terima === "ditolak"
-                  ? "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
-                  : item.status_terima === null
-                    ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300"
-                    : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+              ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300"
+              : item.status_terima === "ditolak"
+                ? "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300"
+                : item.status_terima === null
+                  ? "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
               }`}
           >
             {text}
@@ -600,7 +602,7 @@ export default function DataIncoming() {
         onClose={() => setShowExportModal(false)}
         data={data}
         columns={columns}
-        title="Export Data Users"
+        title="Export Data Surat Masuk"
         filename="users_export"
       />
     </>
